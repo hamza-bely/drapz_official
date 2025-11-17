@@ -1,0 +1,172 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
+import Image from 'next/image';
+import Link from 'next/link';
+import { ShoppingCart, Package, Truck, Shield, ArrowLeft } from 'lucide-react';
+import { useCart } from '@/lib/cart-context';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+
+export default function ProductPage() {
+  const params = useParams();
+  const slug = params.slug as string;
+  const { addItem } = useCart();
+
+  const [product, setProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [quantity, setQuantity] = useState(1);
+
+  useEffect(() => {
+    async function fetchProduct() {
+      const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .eq('slug', slug)
+        .maybeSingle();
+
+      if (!error && data) {
+        setProduct(data);
+      }
+      setLoading(false);
+    }
+
+    fetchProduct();
+  }, [slug]);
+
+  if (loading) {
+    return (
+      <div className="container mx-auto px-4 py-12">
+        <div className="h-96 bg-slate-100 rounded-lg animate-pulse" />
+      </div>
+    );
+  }
+
+  if (!product) {
+    return (
+      <div className="container mx-auto px-4 py-12 text-center">
+        <h1 className="text-2xl font-bold mb-4">Produit introuvable</h1>
+        <Link href="/catalogue">
+          <Button>Retour au catalogue</Button>
+        </Link>
+      </div>
+    );
+  }
+
+  const handleAddToCart = () => {
+    addItem(product, quantity);
+  };
+
+  return (
+    <div className="container mx-auto px-4 py-12">
+      <Link href="/catalogue" className="inline-flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 mb-8">
+        <ArrowLeft className="h-4 w-4" />
+        Retour au catalogue
+      </Link>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="relative aspect-square overflow-hidden rounded-lg bg-slate-100">
+          <Image
+            src={product.image_url}
+            alt={product.name}
+            fill
+            className="object-cover"
+            priority
+          />
+          {product.stock <= 10 && product.stock > 0 && (
+            <Badge className="absolute top-4 left-4 bg-orange-500 hover:bg-orange-600">
+              Stock limité
+            </Badge>
+          )}
+          {product.stock === 0 && (
+            <Badge className="absolute top-4 left-4 bg-red-500 hover:bg-red-600">
+              Épuisé
+            </Badge>
+          )}
+        </div>
+
+        <div className="space-y-6">
+          <div>
+            <h1 className="text-3xl md:text-4xl font-bold mb-4">{product.name}</h1>
+            <p className="text-4xl font-bold text-blue-600 mb-6">{product.price.toFixed(2)} €</p>
+            <p className="text-slate-600 leading-relaxed">{product.description}</p>
+          </div>
+
+          <Card>
+            <CardContent className="p-4 space-y-3">
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-slate-600">Taille</span>
+                <span className="font-medium">{product.size}</span>
+              </div>
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-slate-600">Matériau</span>
+                <span className="font-medium">{product.material}</span>
+              </div>
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-slate-600">Stock disponible</span>
+                <span className="font-medium">{product.stock > 0 ? `${product.stock} unités` : 'Épuisé'}</span>
+              </div>
+              {product.is_customizable && (
+                <div className="pt-2 border-t">
+                  <Badge variant="secondary">Personnalisable</Badge>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          <div className="space-y-4">
+            <div className="flex items-center gap-4">
+              <label className="font-medium">Quantité:</label>
+              <div className="flex items-center border rounded-lg">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                  disabled={quantity <= 1}
+                >
+                  -
+                </Button>
+                <span className="px-4 font-medium">{quantity}</span>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
+                  disabled={quantity >= product.stock}
+                >
+                  +
+                </Button>
+              </div>
+            </div>
+
+            <Button
+              size="lg"
+              className="w-full gap-2"
+              onClick={handleAddToCart}
+              disabled={product.stock === 0}
+            >
+              <ShoppingCart className="h-5 w-5" />
+              {product.stock === 0 ? 'Produit épuisé' : 'Ajouter au panier'}
+            </Button>
+          </div>
+
+          <div className="grid grid-cols-3 gap-4 pt-6 border-t">
+            <div className="text-center space-y-2">
+              <Package className="h-6 w-6 mx-auto text-blue-600" />
+              <p className="text-xs text-slate-600">Qualité Premium</p>
+            </div>
+            <div className="text-center space-y-2">
+              <Truck className="h-6 w-6 mx-auto text-blue-600" />
+              <p className="text-xs text-slate-600">Livraison 24-48h</p>
+            </div>
+            <div className="text-center space-y-2">
+              <Shield className="h-6 w-6 mx-auto text-blue-600" />
+              <p className="text-xs text-slate-600">Paiement sécurisé</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
