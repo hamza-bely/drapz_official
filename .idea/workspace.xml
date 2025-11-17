@@ -5,7 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cbe99a05-521d-4be7-9bb5-9a4adf915788" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/drapz-backend" beforeDir="false" afterPath="$PROJECT_DIR$/drapz-backend" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/drapz-backend/README.md" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -13,7 +13,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/drapz-backend" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -71,7 +71,7 @@
       <option name="presentableId" value="Default" />
       <updated>1763399626948</updated>
       <workItem from="1763399628336" duration="836000" />
-      <workItem from="1763405246269" duration="830000" />
+      <workItem from="1763405246269" duration="1728000" />
     </task>
     <servers />
   </component>
