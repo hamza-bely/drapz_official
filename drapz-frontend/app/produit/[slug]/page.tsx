@@ -6,35 +6,40 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ShoppingCart, Package, Truck, Shield, ArrowLeft } from 'lucide-react';
 import { useCart } from '@/lib/cart-context';
+import { catalogueApi } from '@/lib/api-client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { ProduitResponse } from '@/types/api';
 
 export default function ProductPage() {
   const params = useParams();
-  const slug = params.slug as string;
+  const id = params?.slug as string | undefined;
   const { addItem } = useCart();
 
-  const [product, setProduct] = useState<Product | null>(null);
+  const [product, setProduct] = useState<ProduitResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
-    async function fetchProduct() {
-      const { data, error } = await supabase
-        .from('products')
-        .select('*')
-        .eq('slug', slug)
-        .maybeSingle();
-
-      if (!error && data) {
-        setProduct(data);
-      }
+    if (!id) {
       setLoading(false);
+      return;
+    }
+
+    async function fetchProduct() {
+      try {
+        const resp = await catalogueApi.getProduit(id);
+        setProduct(resp.data);
+      } catch (err) {
+        console.error('Failed to fetch product:', err);
+      } finally {
+        setLoading(false);
+      }
     }
 
     fetchProduct();
-  }, [slug]);
+  }, [id]);
 
   if (loading) {
     return (
@@ -56,7 +61,9 @@ export default function ProductPage() {
   }
 
   const handleAddToCart = () => {
-    addItem(product, quantity);
+    if (product) {
+      addItem({ id: product.id, name: product.nom, description: product.description, price: product.prix, imageUrl: product.imageUrl, stock: product.stock }, quantity);
+    }
   };
 
   return (
@@ -69,8 +76,8 @@ export default function ProductPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
         <div className="relative aspect-square overflow-hidden rounded-lg bg-slate-100">
           <Image
-            src={product.image_url}
-            alt={product.name}
+            src={product.imageUrl}
+            alt={product.nom}
             fill
             className="object-cover"
             priority
@@ -89,30 +96,21 @@ export default function ProductPage() {
 
         <div className="space-y-6">
           <div>
-            <h1 className="text-3xl md:text-4xl font-bold mb-4">{product.name}</h1>
-            <p className="text-4xl font-bold text-blue-600 mb-6">{product.price.toFixed(2)} €</p>
+            <h1 className="text-3xl md:text-4xl font-bold mb-4">{product.nom}</h1>
+            <p className="text-4xl font-bold text-blue-600 mb-6">{product.prix.toFixed(2)} €</p>
             <p className="text-slate-600 leading-relaxed">{product.description}</p>
           </div>
 
           <Card>
             <CardContent className="p-4 space-y-3">
               <div className="flex items-center justify-between text-sm">
-                <span className="text-slate-600">Taille</span>
-                <span className="font-medium">{product.size}</span>
-              </div>
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-slate-600">Matériau</span>
-                <span className="font-medium">{product.material}</span>
-              </div>
-              <div className="flex items-center justify-between text-sm">
                 <span className="text-slate-600">Stock disponible</span>
                 <span className="font-medium">{product.stock > 0 ? `${product.stock} unités` : 'Épuisé'}</span>
               </div>
-              {product.is_customizable && (
-                <div className="pt-2 border-t">
-                  <Badge variant="secondary">Personnalisable</Badge>
-                </div>
-              )}
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-slate-600">Actif</span>
+                <span className="font-medium">{product.actif ? 'Oui' : 'Non'}</span>
+              </div>
             </CardContent>
           </Card>
 

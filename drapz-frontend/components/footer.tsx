@@ -8,7 +8,6 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="space-y-4">
             <Link href="/" className="flex items-center gap-2 font-bold text-xl">
-              <Flag className="h-6 w-6 text-blue-600" />
               <span className="bg-gradient-to-r from-blue-600 to-red-600 bg-clip-text text-transparent">
                 Drapz
               </span>

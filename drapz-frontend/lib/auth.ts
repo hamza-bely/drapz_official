@@ -3,7 +3,7 @@ import { AuthRequest, AuthResponse, InscriptionRequest } from "@/types/api";
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api';
 
 export async function login(credentials: AuthRequest): Promise<AuthResponse> {
-    const response = await fetch(`${API_URL}/v1/api/auth/connexion`, {
+    const response = await fetch(`${API_URL}/api/auth/connexion`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -20,7 +20,7 @@ export async function login(credentials: AuthRequest): Promise<AuthResponse> {
 }
 
 export async function register(userData: InscriptionRequest): Promise<AuthResponse> {
-    const response = await fetch(`${API_URL}/v1/api/auth/inscription`, {
+    const response = await fetch(`${API_URL}/api/auth/inscription`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

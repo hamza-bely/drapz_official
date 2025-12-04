@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:8080/api/v1';
+const API_BASE_URL = 'http://localhost:8080/api/';
 
 export const apiClient = axios.create({
     baseURL: API_BASE_URL,
@@ -21,9 +21,9 @@ apiClient.interceptors.request.use((config) => {
 // API Catalogue
 export const catalogueApi = {
     getProduits: (page = 0, size = 10) =>
-        apiClient.get(`/produits?page=${page}&size=${size}`),
+        apiClient.get(`api/produits?page=${page}&size=${size}`),
     getProduit: (id: string) =>
-        apiClient.get(`/produits/${id}`),
+        apiClient.get(`api/produits/${id}`),
 };
 
 // API Authentification

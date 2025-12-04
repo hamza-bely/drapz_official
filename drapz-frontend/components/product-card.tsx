@@ -47,7 +47,7 @@ export function ProductCard({ id, name, description, price, imageUrl, stock }: P
       </Link>
 
       <CardContent className="p-4">
-        <Link href={`/produit/${product.slug}`}>
+        <Link href={`/produit/${id}`}>
           <h3 className="font-semibold text-lg mb-2 group-hover:text-blue-600 transition-colors">
             {name}
           </h3>
@@ -60,8 +60,8 @@ export function ProductCard({ id, name, description, price, imageUrl, stock }: P
           {price.toFixed(2)} €
         </span>
         <Button
-          onClick={() => addItem(product)}
-          disabled={product.stock === 0}
+          onClick={() => addItem({ id, name, description, price, imageUrl, stock }, 1)}
+          disabled={stock === 0}
           className="gap-2"
         >
           <ShoppingCart className="h-4 w-4" />

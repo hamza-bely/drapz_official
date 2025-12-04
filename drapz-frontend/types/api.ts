@@ -14,10 +14,10 @@ export interface PageProduitResponse {
     totalElements: number;
     totalPages: number;
     size: number;
-    content: ProduitResponse[];<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    content: ProduitResponse[];
     number: number;
-    first: boolean;<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-    last: boolean;<<<<<<<<<<<<<<<<<<<<< <<<<<
+    first: boolean;
+    last: boolean;
     numberOfElements: number;
     empty: boolean;
 }
