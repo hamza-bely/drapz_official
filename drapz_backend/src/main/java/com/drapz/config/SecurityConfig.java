@@ -1,4 +1,4 @@
-package com.drapz.security.config;
+package com.drapz.config;
 
 import com.drapz.security.JwtAuthenticationEntryPoint;
 import com.drapz.security.JwtAuthenticationFilter;
@@ -17,6 +17,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -33,7 +38,7 @@ public class SecurityConfig {
             // et gérées de manière plus spécifique ci-dessous (POST pour inscription/connexion).
 
             // Routes d'API publiques restantes
-            "/api/v1/produits/**",
+            "api/produits/**",
             "/api/v1/paiement/webhook",
 
             // Chemins Swagger/OpenAPI (avec le context-path /api)
@@ -69,6 +74,9 @@ public class SecurityConfig {
                 // 1. Désactiver le CSRF (car nous utilisons des tokens JWT)
                 .csrf(AbstractHttpConfigurer::disable)
 
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // ✅ Activer CORS
+
+
                 // 2. Gérer les exceptions d'authentification
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint(jwtAuthenticationEntryPoint)
@@ -82,25 +90,18 @@ public class SecurityConfig {
                 // 4. Configurer les règles d'autorisation HTTP
                 .authorizeHttpRequests(authorize -> authorize
 
-                        .requestMatchers(HttpMethod.POST, "/v1/api/auth/inscription").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/v1/api/auth/connexion").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/inscription").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/connexion").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/produits/**").permitAll()
 
                         .requestMatchers(PUBLIC_URLS).permitAll()
 
-                        // Autorisation basée sur les rôles (ADMIN)
-                        .requestMatchers(HttpMethod.POST, "/api/v1/produits").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/produits/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/v1/produits/**").hasRole("ADMIN")
-
-                        // Autorisation basée sur les rôles (USER)
                         .requestMatchers("/api/v1/commandes/**").hasRole("USER")
                         .requestMatchers("/api/v1/paiement/creer-session").hasRole("USER")
 
-                        // Toutes les autres requêtes nécessitent une authentification
                         .anyRequest().authenticated()
                 )
 
-                // 5. Ajouter le filtre JWT avant le filtre d'authentification standard
                 .addFilterBefore(
                         jwtAuthenticationFilter,
                         UsernamePasswordAuthenticationFilter.class
@@ -124,4 +125,19 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
+
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4000", "https://ton-domaine-front.com")); // ✅ Ajoute ton front
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
 }

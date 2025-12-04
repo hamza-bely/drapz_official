@@ -15,7 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/v1/api/commandes")
+@RequestMapping("/api/commandes")
 @RequiredArgsConstructor
 @SecurityRequirement(name = "bearer-jwt")
 @Tag(name = "Commandes", description = "Endpoints pour la gestion des commandes")

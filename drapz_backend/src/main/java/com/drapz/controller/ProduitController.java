@@ -16,7 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/v1/api/produits")
+@RequestMapping("/api/produits")
 @RequiredArgsConstructor
 @Tag(name = "Catalogue", description = "Endpoints pour la gestion du catalogue de produits")
 public class ProduitController {

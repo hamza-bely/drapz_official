@@ -21,7 +21,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/v1/api/paiement")
+@RequestMapping("/api/paiement")
 @RequiredArgsConstructor
 @Slf4j
 @Tag(name = "Paiement", description = "Endpoints pour la gestion des paiements Stripe")
@@ -39,6 +39,7 @@ public class PaiementController {
             @Valid @RequestBody CreerSessionRequest request,
             Authentication authentication) {
         String utilisateurId = ((UserDetails) authentication.getPrincipal()).getUsername();
+        String u = utilisateurId;
         CreerSessionResponse response = commandeService.creerSessionPaiement(utilisateurId, request);
         return ResponseEntity.ok(response);
     }

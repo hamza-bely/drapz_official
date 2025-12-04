@@ -42,7 +42,7 @@ public class CommandeService {
     public CreerSessionResponse creerSessionPaiement(String utilisateurId, CreerSessionRequest request) {
         log.info("Création d'une session de paiement pour l'utilisateur: {}", utilisateurId);
 
-        Utilisateur utilisateur = utilisateurRepository.findById(utilisateurId)
+        Utilisateur utilisateur = utilisateurRepository.findByEmail(utilisateurId)
             .orElseThrow(() -> new ResourceNotFoundException("Utilisateur non trouvé"));
 
         List<SessionCreateParams.LineItem> lineItems = new ArrayList<>();
@@ -97,8 +97,8 @@ public class CommandeService {
         Commande commandeSauvegardee = commandeRepository.save(commande);
 
         try {
-            String successUrl = "http://localhost:3000/paiement/succes?sessionId={CHECKOUT_SESSION_ID}";
-            String cancelUrl = "http://localhost:3000/paiement/annulation";
+            String successUrl = "http://localhost:4000/paiement/succes?sessionId={CHECKOUT_SESSION_ID}";
+            String cancelUrl = "http://localhost:4000/paiement/annulation";
 
             SessionCreateParams params = SessionCreateParams.builder()
                 .setMode(SessionCreateParams.Mode.PAYMENT)
