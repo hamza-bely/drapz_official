@@ -6,6 +6,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ShoppingCart, Package, Truck, Shield, ArrowLeft } from 'lucide-react';
 import { useCart } from '@/lib/cart-context';
+import { useAuth } from '@/lib/auth-context';
+import { useToast } from '@/hooks/use-toast';
+import { useRouter } from 'next/navigation';
 import { catalogueApi } from '@/lib/api-client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -16,6 +19,9 @@ export default function ProductPage() {
   const params = useParams();
   const id = params?.slug as string | undefined;
   const { addItem } = useCart();
+  const { user } = useAuth();
+  const { toast } = useToast();
+  const router = useRouter();
 
   const [product, setProduct] = useState<ProduitResponse | null>(null);
   const [loading, setLoading] = useState(true);
@@ -61,6 +67,15 @@ export default function ProductPage() {
   }
 
   const handleAddToCart = () => {
+    if (!user) {
+      toast({
+        title: 'Connectez-vous',
+        description: 'Connectez-vous pour ajouter un produit au panier',
+      });
+      router.push('/auth/login');
+      return;
+    }
+
     if (product) {
       addItem({ id: product.id, name: product.nom, description: product.description, price: product.prix, imageUrl: product.imageUrl, stock: product.stock }, quantity);
     }

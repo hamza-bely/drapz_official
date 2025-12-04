@@ -37,13 +37,13 @@ export const authApi = {
 // API Paiement
 export const paiementApi = {
     creerSession: (articles: Array<{ produitId: string; quantite: number }>) =>
-        apiClient.post('/paiement/creer-session', { articles }),
+        apiClient.post('api/paiement/creer-session', { articles }),
 };
 
 // API Commandes
 export const commandesApi = {
     getMesCommandes: (page = 0, size = 10) =>
-        apiClient.get(`/commandes?page=${page}&size=${size}`),
+        apiClient.get(`api/commandes?page=${page}&size=${size}`),
     getCommande: (id: string) =>
-        apiClient.get(`/commandes/${id}`),
+        apiClient.get(`api/commandes/${id}`),
 };

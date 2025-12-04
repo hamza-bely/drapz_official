@@ -7,6 +7,9 @@ import { useCart } from '@/lib/cart-context';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/lib/auth-context';
+import { useToast } from '@/hooks/use-toast';
 
 type ProductCardProps = {
   id: string;
@@ -19,8 +22,23 @@ type ProductCardProps = {
 
 export function ProductCard({ id, name, description, price, imageUrl, stock }: ProductCardProps) {
   const { addItem } = useCart();
+  const router = useRouter();
+  const { user } = useAuth();
+  const { toast } = useToast();
 
   const product = { id, name, description, price, imageUrl, stock };
+
+  const handleAdd = () => {
+    if (!user) {
+      toast({
+        title: 'Connectez-vous',
+        description: "Connectez-vous pour ajouter un produit au panier",
+      });
+      router.push('/auth/login');
+      return;
+    }
+    addItem(product, 1);
+  };
 
   return (
     <Card className="group overflow-hidden hover:shadow-lg transition-shadow duration-300">
@@ -60,7 +78,7 @@ export function ProductCard({ id, name, description, price, imageUrl, stock }: P
           {price.toFixed(2)} €
         </span>
         <Button
-          onClick={() => addItem({ id, name, description, price, imageUrl, stock }, 1)}
+          onClick={handleAdd}
           disabled={stock === 0}
           className="gap-2"
         >

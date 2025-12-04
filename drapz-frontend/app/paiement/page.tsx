@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -6,6 +7,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { CreditCard, Lock, ShoppingBag } from 'lucide-react';
 import { useCart } from '@/lib/cart-context';
+import { paiementApi } from '@/lib/api-client';
+import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -14,6 +17,7 @@ import { Label } from '@/components/ui/label';
 export default function CheckoutPage() {
   const router = useRouter();
   const { items, totalPrice, totalItems } = useCart();
+  const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [formData, setFormData] = useState({
@@ -54,11 +58,34 @@ export default function CheckoutPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    try {
+      const articles = items.map((it) => ({ produitId: it.product.id, quantite: it.quantity }));
+      const resp = await paiementApi.creerSession(articles);
+      const data = resp.data;
 
-    setTimeout(() => {
-      alert('Fonctionnalité de paiement Stripe à intégrer avec votre backend Spring Boot');
+      if (data?.url) {
+        window.location.href = data.url;
+        return;
+      }
+
+      if (data?.sessionId) {
+        // Optionnel: redirection via stripe-js si configuré
+        // Sinon rediriger vers la page de succès/attente
+        window.location.href = `/paiement/succes?sessionId=${data.sessionId}`;
+        return;
+      }
+
+      throw new Error('Réponse inattendue du serveur');
+    } catch (err: any) {
+      console.error('Erreur création session paiement', err);
+      toast({
+        title: 'Erreur',
+        description: err?.response?.data?.message || err.message || 'Impossible de créer la session de paiement',
+        variant: 'destructive',
+      });
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
