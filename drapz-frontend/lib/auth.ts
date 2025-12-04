@@ -1,6 +1,6 @@
 import { AuthRequest, AuthResponse, InscriptionRequest } from "@/types/api";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api/';
 
 export async function login(credentials: AuthRequest): Promise<AuthResponse> {
     const response = await fetch(`${API_URL}/api/auth/connexion`, {
@@ -8,6 +8,7 @@ export async function login(credentials: AuthRequest): Promise<AuthResponse> {
         headers: {
             'Content-Type': 'application/json',
         },
+        credentials: 'include', // ✅ IMPORTANT: Envoyer/recevoir les cookies
         body: JSON.stringify(credentials),
     });
 
@@ -25,6 +26,7 @@ export async function register(userData: InscriptionRequest): Promise<AuthRespon
         headers: {
             'Content-Type': 'application/json',
         },
+        credentials: 'include', // ✅ IMPORTANT: Envoyer/recevoir les cookies
         body: JSON.stringify(userData),
     });
 
@@ -36,17 +38,50 @@ export async function register(userData: InscriptionRequest): Promise<AuthRespon
     return data;
 }
 
+/**
+ * Récupérer les infos de l'utilisateur connecté depuis le backend
+ * Le token est automatiquement envoyé via le cookie HttpOnly
+ */
+export async function getCurrentUser(): Promise<AuthResponse> {
+    const response = await fetch(`${API_URL}/api/auth/me`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include', // ✅ Envoyer le cookie avec le token
+    });
+
+    if (!response.ok) {
+        throw new Error('Erreur lors de la récupération des infos utilisateur');
+    }
+
+    return response.json();
+}
+
+/**
+ * Déconnexion - supprime le cookie côté serveur
+ */
+export async function logout(): Promise<void> {
+    await fetch(`${API_URL}/auth/logout`, {
+        method: 'POST',
+        credentials: 'include', // ✅ Envoyer le cookie
+    });
+}
+
+/**
+ * Ces fonctions ne sont plus utilisées avec les cookies HttpOnly
+ */
 export function setToken(token: string) {
-    localStorage.setItem('token', token);
+    // ❌ Non utilisé - le token est géré via les cookies HttpOnly
+    console.warn('setToken n\'est plus nécessaire avec les cookies HttpOnly');
 }
 
 export function getToken(): string | null {
-    if (typeof window !== 'undefined') {
-        return localStorage.getItem('token');
-    }
+    // ❌ Non utilisé - le token est en cookie HttpOnly et automatiquement envoyé
     return null;
 }
 
 export function removeToken() {
-    localStorage.removeItem('token');
+    // ❌ Non utilisé - le logout supprime le cookie côté serveur
+    console.warn('removeToken n\'est plus nécessaire avec les cookies HttpOnly');
 }

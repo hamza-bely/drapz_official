@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { login, setToken } from '@/lib/auth';
+import { login } from '@/lib/auth';
 import { useAuth } from '@/lib/auth-context';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -24,7 +24,6 @@ export default function LoginPage() {
 
         try {
             const response = await login({ email, motDePasse: password });
-            setToken(response.token);
             setUser(response);
             toast({
                 title: 'Connexion réussie',
@@ -43,38 +42,74 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="container flex items-center justify-center min-h-screen">
-            <Card className="w-full max-w-md p-6">
-                <h1 className="text-2xl font-bold text-center mb-6">Connexion</h1>
-                <form onSubmit={handleSubmit} className="space-y-4">
-                    <div>
-                        <Input
-                            type="email"
-                            placeholder="Email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                        />
+        <div className="container mx-auto px-4 py-12 md:py-20 min-h-[calc(100vh-200px)] flex items-center justify-center">
+            <Card className="w-full max-w-md p-6 md:p-8">
+                <div className="space-y-6">
+                    <div className="text-center">
+                        <h1 className="text-2xl md:text-3xl font-bold mb-2">Connexion</h1>
+                        <p className="text-sm text-slate-600">Connectez-vous à votre compte Drapz</p>
                     </div>
-                    <div>
-                        <Input
-                            type="password"
-                            placeholder="Mot de passe"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                        />
+
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                        <div className="space-y-2">
+                            <label className="text-sm font-medium text-slate-700">Email</label>
+                            <Input
+                                type="email"
+                                placeholder="votre@email.com"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                                className="w-full"
+                            />
+                        </div>
+
+                        <div className="space-y-2">
+                            <label className="text-sm font-medium text-slate-700">Mot de passe</label>
+                            <Input
+                                type="password"
+                                placeholder="••••••••"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                                className="w-full"
+                            />
+                        </div>
+
+                        <Button
+                            type="submit"
+                            className="w-full h-10 md:h-11"
+                            disabled={loading}
+                        >
+                            {loading ? 'Connexion en cours...' : 'Se connecter'}
+                        </Button>
+                    </form>
+
+                    <div className="relative">
+                        <div className="absolute inset-0 flex items-center">
+                            <div className="w-full border-t" />
+                        </div>
+                        <div className="relative flex justify-center text-sm">
+                            <span className="px-2 bg-white text-slate-500">ou</span>
+                        </div>
                     </div>
-                    <Button type="submit" className="w-full" disabled={loading}>
-                        {loading ? 'Connexion...' : 'Se connecter'}
-                    </Button>
-                </form>
-                <p className="mt-4 text-center">
-                    Pas encore de compte ?{' '}
-                    <Link href="/auth/register" className="text-blue-600 hover:underline">
-                        S&apos;inscrire
+
+                    <Link href="/auth/register">
+                        <Button
+                            type="button"
+                            variant="outline"
+                            className="w-full h-10 md:h-11"
+                        >
+                            Créer un compte
+                        </Button>
                     </Link>
-                </p>
+
+                    <p className="text-center text-sm text-slate-600">
+                        Pas encore de compte ?{' '}
+                        <Link href="/auth/register" className="text-blue-600 font-semibold hover:underline">
+                            S&apos;inscrire
+                        </Link>
+                    </p>
+                </div>
             </Card>
         </div>
     );

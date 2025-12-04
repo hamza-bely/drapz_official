@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from 'react';
 import { AuthResponse } from '@/types/api';
-import { getToken, removeToken } from './auth';
+import { getCurrentUser, logout as authLogout } from './auth';
 
 interface AuthContextType {
     user: AuthResponse | null;
@@ -10,6 +10,7 @@ interface AuthContextType {
     isAdmin: boolean;
     logout: () => void;
     loading: boolean;
+    isAuthenticated: boolean;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -18,58 +19,63 @@ const AuthContext = createContext<AuthContextType>({
     isAdmin: false,
     logout: () => { },
     loading: true,
+    isAuthenticated: false,
 });
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [user, setUser] = useState<AuthResponse | null>(null);
     const [isAdmin, setIsAdmin] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-    // Restore user session from localStorage on mount
+    /**
+     * Au mount du provider, vérifier si l'utilisateur est connecté
+     * en récupérant ses infos depuis le backend via le token stocké en cookie
+     */
     useEffect(() => {
-        try {
-            const token = getToken();
-            const savedUser = localStorage.getItem('user');
-            
-            if (token && savedUser) {
-                const parsedUser = JSON.parse(savedUser);
-                setUser(parsedUser);
-                // Check if user is admin if needed
-                setIsAdmin(false); // TODO: Parse from user data if available
+        const initializeAuth = async () => {
+            try {
+                console.log('🔍 Vérification de la session utilisateur...');
+                const userData = await getCurrentUser();
+                console.log('✅ Utilisateur connecté:', userData.email);
+                setUser(userData);
+                setIsAuthenticated(true);
+                // TODO: Vérifier si l'utilisateur est admin selon ses rôles
+                setIsAdmin(false);
+            } catch (error: any) {
+                // L'utilisateur n'est pas connecté ou le token a expiré
+                console.log('❌ Utilisateur non connecté ou session expirée:', error.message);
+                setUser(null);
+                setIsAuthenticated(false);
+                setIsAdmin(false);
+            } finally {
+                setLoading(false);
             }
-        } catch (error) {
-            console.error('Failed to restore user session:', error);
-        } finally {
-            setLoading(false);
-        }
+        };
+
+        initializeAuth();
     }, []);
 
-    // Save user info to localStorage when user changes
     const handleSetUser = (newUser: AuthResponse | null) => {
         setUser(newUser);
-        if (newUser) {
-            try {
-                localStorage.setItem('user', JSON.stringify(newUser));
-            } catch (error) {
-                console.error('Failed to save user to localStorage:', error);
-            }
-        } else {
-            try {
-                localStorage.removeItem('user');
-            } catch (error) {
-                console.error('Failed to remove user from localStorage:', error);
-            }
-        }
+        setIsAuthenticated(newUser !== null);
+        // ✅ Pas d'appel à localStorage - les infos sont servies du backend
     };
 
-    const logout = () => {
-        removeToken();
-        handleSetUser(null);
-        setIsAdmin(false);
+    const logout = async () => {
+        try {
+            await authLogout(); // Appel au backend pour supprimer le cookie
+            console.log('✅ Déconnexion réussie');
+        } catch (error) {
+            console.error('❌ Erreur lors de la déconnexion:', error);
+        } finally {
+            handleSetUser(null);
+            setIsAdmin(false);
+        }
     };
 
     return (
-        <AuthContext.Provider value={{ user, setUser: handleSetUser, isAdmin, logout, loading }}>
+        <AuthContext.Provider value={{ user, setUser: handleSetUser, isAdmin, logout, loading, isAuthenticated }}>
             {children}
         </AuthContext.Provider>
     );

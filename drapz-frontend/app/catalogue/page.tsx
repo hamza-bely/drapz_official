@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { catalogueApi } from '@/lib/api-client';
 import { ProduitResponse } from '@/types/api';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 function CatalogueContent() {
   const [products, setProducts] = useState<ProduitResponse[]>([]);
@@ -13,6 +14,7 @@ function CatalogueContent() {
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [sortBy, setSortBy] = useState<string>('nom');
+  const [itemsPerPage] = useState(12);
 
   useEffect(() => {
     let cancelled = false;
@@ -20,11 +22,11 @@ function CatalogueContent() {
     async function fetchProducts() {
       setLoading(true);
       try {
-        const response = await catalogueApi.getProduits(currentPage, 12);
+        const response = await catalogueApi.getProduits(currentPage, itemsPerPage);
         if (cancelled) return;
         let items: ProduitResponse[] = response.data.content || [];
 
-        // client-side sorting (backend doesn't expose sort in the OpenAPI)
+        // client-side sorting
         if (sortBy === 'prix_asc') {
           items = items.slice().sort((a, b) => a.prix - b.prix);
         } else if (sortBy === 'prix_desc') {
@@ -47,20 +49,26 @@ function CatalogueContent() {
     return () => {
       cancelled = true;
     };
-  }, [currentPage, sortBy]);
+  }, [currentPage, sortBy, itemsPerPage]);
 
   return (
-    <div className="container mx-auto px-4 py-12">
-      <div className="mb-8">
-        <h1 className="text-3xl md:text-4xl font-bold mb-4">Notre Collection de Drapeaux</h1>
-        <p className="text-lg text-slate-600">Découvrez notre sélection de drapeaux de qualité</p>
+    <div className="container mx-auto px-4 py-8 md:py-12">
+      {/* Header */}
+      <div className="mb-8 md:mb-12">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 md:mb-4">
+          Notre Collection de Drapeaux
+        </h1>
+        <p className="text-sm sm:text-base text-slate-600">
+          Découvrez notre sélection de drapeaux de qualité
+        </p>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-4 mb-8">
-        <div className="w-full md:w-64">
+      {/* Filter Section */}
+      <div className="flex flex-col sm:flex-row gap-4 mb-8 items-start sm:items-end">
+        <div className="w-full sm:w-64">
           <label className="text-sm font-medium mb-2 block">Trier par</label>
           <Select value={sortBy} onValueChange={setSortBy}>
-            <SelectTrigger>
+            <SelectTrigger className="w-full">
               <SelectValue placeholder="Trier par" />
             </SelectTrigger>
             <SelectContent>
@@ -70,12 +78,18 @@ function CatalogueContent() {
             </SelectContent>
           </Select>
         </div>
+        
+        {/* Page indicator */}
+        <div className="text-sm text-slate-600">
+          Page {currentPage + 1} sur {totalPages}
+        </div>
       </div>
 
+      {/* Products Grid */}
       {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {[...Array(8)].map((_, i) => (
-            <div key={i} className="h-96 bg-slate-100 rounded-lg animate-pulse" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+          {[...Array(itemsPerPage)].map((_, i) => (
+            <div key={i} className="h-80 md:h-96 bg-slate-100 rounded-lg animate-pulse" />
           ))}
         </div>
       ) : products.length === 0 ? (
@@ -85,7 +99,7 @@ function CatalogueContent() {
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 mb-8">
             {products.map((product) => (
               <ProductCard
                 key={product.id}
@@ -99,21 +113,33 @@ function CatalogueContent() {
             ))}
           </div>
 
+          {/* Pagination */}
           {totalPages > 1 && (
-            <div className="mt-8 flex justify-center gap-2">
+            <div className="flex flex-col sm:flex-row justify-center gap-2 sm:gap-4 items-center">
               <Button
                 variant="outline"
+                size="sm"
                 onClick={() => setCurrentPage((p) => Math.max(0, p - 1))}
                 disabled={currentPage === 0}
+                className="w-full sm:w-auto gap-2"
               >
-                Page précédente
+                <ChevronLeft className="h-4 w-4" />
+                Précédente
               </Button>
+
+              <span className="text-sm text-slate-600">
+                Page {currentPage + 1} de {totalPages}
+              </span>
+
               <Button
                 variant="outline"
+                size="sm"
                 onClick={() => setCurrentPage((p) => Math.min(totalPages - 1, p + 1))}
                 disabled={currentPage === totalPages - 1}
+                className="w-full sm:w-auto gap-2"
               >
-                Page suivante
+                Suivante
+                <ChevronRight className="h-4 w-4" />
               </Button>
             </div>
           )}

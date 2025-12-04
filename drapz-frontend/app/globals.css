@@ -76,7 +76,76 @@
   * {
     @apply border-border;
   }
+  
   body {
     @apply bg-background text-foreground;
   }
+
+  /* ✅ Optimisations mobiles */
+  html {
+    @apply scroll-smooth;
+  }
+
+  /* Enlever l'outline bleu iOS */
+  button, input, select, textarea {
+    @apply outline-none;
+  }
+
+  /* Améliorer la lisibilité sur mobile */
+  input, textarea, select {
+    @apply text-base; /* Évite le zoom sur iOS */
+  }
+
+  /* Gestion du safe-area pour encoche/barre à statut */
+  @supports (padding: max(0px)) {
+    body {
+      padding-left: max(1rem, env(safe-area-inset-left));
+      padding-right: max(1rem, env(safe-area-inset-right));
+    }
+  }
+}
+
+@layer components {
+  /* ✅ Container responsive avec max-width adaptatif */
+  .container {
+    @apply w-full mx-auto px-4;
+    /* Padding automatique géré */
+  }
+
+  /* ✅ Boutons responsive */
+  .btn-responsive {
+    @apply px-4 py-2 md:px-6 md:py-3 text-sm md:text-base;
+  }
+
+  /* ✅ Grille produits auto-responsive */
+  .grid-products {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6;
+  }
+
+  /* ✅ Texte responsive */
+  .text-responsive-h1 {
+    @apply text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold;
+  }
+
+  .text-responsive-h2 {
+    @apply text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold;
+  }
+
+  .text-responsive-h3 {
+    @apply text-lg sm:text-xl md:text-2xl font-semibold;
+  }
+}
+
+/* ✅ Animation de chargement progressive */
+@keyframes pulse-soft {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }

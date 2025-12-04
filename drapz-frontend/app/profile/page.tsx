@@ -3,9 +3,11 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import { commandesApi } from '@/lib/api-client';
-import { Card } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import Link from 'next/link';
+import { useToast } from '@/hooks/use-toast';
 
 interface Adresse {
   ligne1: string;
@@ -16,6 +18,7 @@ interface Adresse {
 
 export default function ProfilePage() {
   const { user } = useAuth();
+  const { toast } = useToast();
   const [orders, setOrders] = useState<any[]>([]);
   const [loadingOrders, setLoadingOrders] = useState(false);
   const [address, setAddress] = useState<Adresse>({ ligne1: '', ville: '', codePostal: '', pays: '' });
@@ -53,20 +56,30 @@ export default function ProfilePage() {
   const saveAddress = () => {
     try {
       localStorage.setItem('shippingAddress', JSON.stringify(address));
-      alert('Adresse enregistrée');
+      toast({
+        title: 'Succès',
+        description: 'Adresse enregistrée',
+      });
     } catch (e) {
       console.error(e);
+      toast({
+        title: 'Erreur',
+        description: 'Erreur lors de l\'enregistrement',
+        variant: 'destructive',
+      });
     }
   };
 
   if (!user) {
     return (
-      <div className="container mx-auto min-h-[60vh] flex items-center justify-center">
-        <Card className="p-6 text-center">
+      <div className="container mx-auto px-4 py-12 md:py-20 min-h-[calc(100vh-200px)] flex items-center justify-center">
+        <Card className="w-full max-w-md p-6 text-center">
           <h2 className="text-xl font-semibold mb-2">Vous devez vous connecter</h2>
-          <p className="mb-4 text-sm text-muted-foreground">Connectez-vous pour voir votre profil et vos commandes.</p>
+          <p className="mb-4 text-sm text-slate-600">
+            Connectez-vous pour voir votre profil et vos commandes.
+          </p>
           <Link href="/auth/login">
-            <Button>Se connecter</Button>
+            <Button className="w-full">Se connecter</Button>
           </Link>
         </Card>
       </div>
@@ -74,72 +87,180 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="container mx-auto py-8">
-      <h1 className="text-2xl font-bold mb-6">Mon Profil</h1>
+    <div className="container mx-auto px-4 py-8 md:py-12">
+      {/* Header */}
+      <div className="mb-8 md:mb-12">
+        <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-2">Mon Profil</h1>
+        <p className="text-slate-600 text-sm md:text-base">
+          Bienvenue {user.prenom} {user.nom} 👋
+        </p>
+      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="p-6">
-          <h2 className="text-lg font-semibold mb-2">Informations personnelles</h2>
-          <p><strong>Prénom:</strong> {user.prenom}</p>
-          <p><strong>Nom:</strong> {user.nom}</p>
-          <p><strong>Email:</strong> {user.email}</p>
-          <div className="mt-4">
-            <Link href="/auth/register">
-              <Button variant="outline">Modifier mes informations</Button>
-            </Link>
-          </div>
-        </Card>
-
-        <Card className="p-6">
-          <h2 className="text-lg font-semibold mb-2">Adresse de livraison</h2>
-          <div className="space-y-2">
-            <input className="w-full border rounded px-2 py-2" placeholder="Adresse ligne 1" value={address.ligne1} onChange={(e) => setAddress({ ...address, ligne1: e.target.value })} />
-            <input className="w-full border rounded px-2 py-2" placeholder="Ville" value={address.ville} onChange={(e) => setAddress({ ...address, ville: e.target.value })} />
-            <input className="w-full border rounded px-2 py-2" placeholder="Code postal" value={address.codePostal} onChange={(e) => setAddress({ ...address, codePostal: e.target.value })} />
-            <input className="w-full border rounded px-2 py-2" placeholder="Pays" value={address.pays} onChange={(e) => setAddress({ ...address, pays: e.target.value })} />
-            <div className="flex gap-2 mt-3">
-              <Button onClick={saveAddress}>Enregistrer l'adresse</Button>
+      {/* Profile Cards Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-8 md:mb-12">
+        {/* Personal Information */}
+        <Card>
+          <CardContent className="p-4 md:p-6">
+            <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+              👤 Informations personnelles
+            </h2>
+            <div className="space-y-2 text-sm md:text-base">
+              <div>
+                <span className="font-medium text-slate-600">Prénom:</span>
+                <p className="text-slate-800">{user.prenom}</p>
+              </div>
+              <div>
+                <span className="font-medium text-slate-600">Nom:</span>
+                <p className="text-slate-800">{user.nom}</p>
+              </div>
+              <div>
+                <span className="font-medium text-slate-600">Email:</span>
+                <p className="text-slate-800 break-all">{user.email}</p>
+              </div>
             </div>
-          </div>
+            {/* <div className="mt-4">
+              <Link href="/auth/register">
+                <Button variant="outline" size="sm" className="w-full">
+                  Modifier mes informations
+                </Button>
+              </Link>
+            </div> */}
+          </CardContent>
         </Card>
 
-        <Card className="p-6">
-          <h2 className="text-lg font-semibold mb-2">Commande rapide</h2>
-          <p className="text-sm">Lien rapide vers votre panier et historique.</p>
-          <div className="mt-4 flex flex-col gap-2">
-            <Link href="/panier">
-              <Button>Voir mon panier</Button>
-            </Link>
-            <Link href="/catalogue">
-              <Button variant="outline">Continuer mes achats</Button>
-            </Link>
-          </div>
+        {/* Shipping Address */}
+        <Card className="sm:col-span-2 lg:col-span-1">
+          <CardContent className="p-4 md:p-6">
+            <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+              📍 Adresse de livraison
+            </h2>
+            <div className="space-y-3">
+              <div>
+                <label className="text-xs md:text-sm font-medium text-slate-700">Adresse</label>
+                <Input
+                  type="text"
+                  placeholder="123 Rue de la Paix"
+                  value={address.ligne1}
+                  onChange={(e) => setAddress({ ...address, ligne1: e.target.value })}
+                  className="mt-1"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="text-xs md:text-sm font-medium text-slate-700">Ville</label>
+                  <Input
+                    type="text"
+                    placeholder="Paris"
+                    value={address.ville}
+                    onChange={(e) => setAddress({ ...address, ville: e.target.value })}
+                    className="mt-1"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs md:text-sm font-medium text-slate-700">Code postal</label>
+                  <Input
+                    type="text"
+                    placeholder="75000"
+                    value={address.codePostal}
+                    onChange={(e) => setAddress({ ...address, codePostal: e.target.value })}
+                    className="mt-1"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="text-xs md:text-sm font-medium text-slate-700">Pays</label>
+                <Input
+                  type="text"
+                  placeholder="France"
+                  value={address.pays}
+                  onChange={(e) => setAddress({ ...address, pays: e.target.value })}
+                  className="mt-1"
+                />
+              </div>
+              <Button onClick={saveAddress} size="sm" className="w-full h-9 md:h-10">
+                💾 Enregistrer l'adresse
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Quick Links */}
+        <Card className="sm:col-span-2 lg:col-span-1">
+          <CardContent className="p-4 md:p-6">
+            <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+              🛒 Actions rapides
+            </h2>
+            <p className="text-xs md:text-sm text-slate-600 mb-4">
+              Accédez rapidement à votre panier et vos commandes.
+            </p>
+            <div className="flex flex-col gap-2">
+              <Link href="/panier">
+                <Button variant="default" size="sm" className="w-full">
+                  Voir mon panier
+                </Button>
+              </Link>
+              <Link href="/catalogue">
+                <Button variant="outline" size="sm" className="w-full">
+                  Continuer mes achats
+                </Button>
+              </Link>
+            </div>
+          </CardContent>
         </Card>
       </div>
 
-      <section className="mt-8">
-        <h2 className="text-xl font-semibold mb-4">Mes commandes</h2>
+      {/* Orders Section */}
+      <section>
+        <h2 className="text-xl md:text-2xl font-semibold mb-4 md:mb-6">📦 Mes commandes</h2>
         {loadingOrders ? (
-          <p>Chargement...</p>
+          <Card>
+            <CardContent className="p-6">
+              <p className="text-slate-600">Chargement de vos commandes...</p>
+            </CardContent>
+          </Card>
         ) : orders.length === 0 ? (
-          <Card className="p-6">Vous n'avez encore passé aucune commande.</Card>
+          <Card>
+            <CardContent className="p-6">
+              <p className="text-slate-600">Vous n'avez encore passé aucune commande.</p>
+              <Link href="/catalogue">
+                <Button className="mt-4">Commencer vos achats</Button>
+              </Link>
+            </CardContent>
+          </Card>
         ) : (
-          <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
             {orders.map((commande: any) => (
-              <Card key={commande.id} className="p-4">
-                <div className="flex justify-between items-center">
-                  <div>
-                    <div className="font-semibold">Commande #{commande.id}</div>
-                    <div className="text-sm text-muted-foreground">{new Date(commande.createdAt).toLocaleString()}</div>
-                    <div className="mt-2 text-sm">Statut: <strong>{commande.statut}</strong></div>
-                    <div className="mt-1 text-sm">Montant total: <strong>{commande.montantTotal} €</strong></div>
-                  </div>
-                  <div className="flex flex-col gap-2">
+              <Card key={commande.id} className="overflow-hidden">
+                <CardContent className="p-4 md:p-6">
+                  <div className="space-y-3">
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <div className="font-semibold text-sm md:text-base">
+                          Commande #{commande.id.substring(0, 8)}
+                        </div>
+                        <div className="text-xs md:text-sm text-slate-600">
+                          {new Date(commande.createdAt).toLocaleDateString('fr-FR')}
+                        </div>
+                      </div>
+                      <span className="text-xs md:text-sm font-semibold px-3 py-1 rounded-full bg-blue-100 text-blue-700">
+                        {commande.statut}
+                      </span>
+                    </div>
+
+                    <div className="border-t pt-3">
+                      <div className="flex justify-between items-center text-sm md:text-base">
+                        <span className="text-slate-600">Montant:</span>
+                        <span className="font-bold text-blue-600">{commande.montantTotal.toFixed(2)} €</span>
+                      </div>
+                    </div>
+
                     <Link href={`/commande/${commande.id}`}>
-                      <Button variant="ghost">Voir</Button>
+                      <Button variant="outline" size="sm" className="w-full h-8 md:h-9">
+                        Voir les détails
+                      </Button>
                     </Link>
                   </div>
-                </div>
+                </CardContent>
               </Card>
             ))}
           </div>

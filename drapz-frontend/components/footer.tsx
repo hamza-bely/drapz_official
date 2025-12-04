@@ -1,25 +1,29 @@
 import Link from 'next/link';
-import { Flag } from 'lucide-react';
 
 export function Footer() {
+  const currentYear = new Date().getFullYear();
+
   return (
-    <footer className="border-t bg-slate-50">
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+    <footer className="border-t bg-slate-50 mt-12">
+      <div className="container mx-auto px-4 py-8 md:py-12">
+        {/* Main Footer Content */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 mb-8">
+          {/* Branding Section */}
           <div className="space-y-4">
-            <Link href="/" className="flex items-center gap-2 font-bold text-xl">
+            <Link href="/" className="flex items-center gap-2 font-bold text-lg md:text-xl">
               <span className="bg-gradient-to-r from-blue-600 to-red-600 bg-clip-text text-transparent">
                 Drapz
               </span>
             </Link>
-            <p className="text-sm text-slate-600">
+            <p className="text-sm text-slate-600 leading-relaxed">
               Votre destination pour des drapeaux de qualité supérieure. Livraison rapide dans toute la France.
             </p>
           </div>
 
+          {/* Categories Section */}
           <div>
-            <h3 className="font-semibold mb-4">Catégories</h3>
-            <ul className="space-y-2 text-sm">
+            <h3 className="font-semibold text-sm md:text-base mb-4">Catégories</h3>
+            <ul className="space-y-2 text-xs md:text-sm">
               <li>
                 <Link href="/catalogue?category=drapeaux-nationaux" className="text-slate-600 hover:text-blue-600 transition-colors">
                   Drapeaux Nationaux
@@ -43,9 +47,10 @@ export function Footer() {
             </ul>
           </div>
 
+          {/* Information Section */}
           <div>
-            <h3 className="font-semibold mb-4">Informations</h3>
-            <ul className="space-y-2 text-sm">
+            <h3 className="font-semibold text-sm md:text-base mb-4">Informations</h3>
+            <ul className="space-y-2 text-xs md:text-sm">
               <li>
                 <Link href="#" className="text-slate-600 hover:text-blue-600 transition-colors">
                   À propos
@@ -69,9 +74,10 @@ export function Footer() {
             </ul>
           </div>
 
+          {/* Legal Section */}
           <div>
-            <h3 className="font-semibold mb-4">Légal</h3>
-            <ul className="space-y-2 text-sm">
+            <h3 className="font-semibold text-sm md:text-base mb-4">Légal</h3>
+            <ul className="space-y-2 text-xs md:text-sm">
               <li>
                 <Link href="#" className="text-slate-600 hover:text-blue-600 transition-colors">
                   Mentions légales
@@ -91,8 +97,9 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="border-t mt-8 pt-8 text-center text-sm text-slate-600">
-          <p>&copy; {new Date().getFullYear()} Drapz. Tous droits réservés.</p>
+        {/* Copyright Section */}
+        <div className="border-t pt-6 md:pt-8 text-center text-xs md:text-sm text-slate-600">
+          <p>&copy; {currentYear} Drapz. Tous droits réservés.</p>
         </div>
       </div>
     </footer>

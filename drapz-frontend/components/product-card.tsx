@@ -38,52 +38,66 @@ export function ProductCard({ id, name, description, price, imageUrl, stock }: P
       return;
     }
     addItem(product, 1);
+    toast({
+      title: 'Succès',
+      description: `${name} ajouté au panier`,
+    });
   };
 
   return (
-    <Card className="group overflow-hidden hover:shadow-lg transition-shadow duration-300">
-      <Link href={`/produit/${id}`}>
+    <Card className="group overflow-hidden hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
+      {/* Product Image Section */}
+      <Link href={`/produit/${id}`} className="flex-shrink-0">
         <div className="relative aspect-[4/3] overflow-hidden bg-slate-100">
           <Image
             src={imageUrl}
             alt={name}
             fill
             className="object-cover group-hover:scale-105 transition-transform duration-300"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            priority={false}
           />
+
+          {/* Stock Badge */}
           {stock <= 10 && stock > 0 && (
-            <Badge className="absolute top-2 left-2 bg-orange-500 hover:bg-orange-600">
+            <Badge className="absolute top-2 left-2 bg-orange-500 hover:bg-orange-600 text-white text-xs">
               Stock limité
             </Badge>
           )}
           {stock === 0 && (
-            <Badge className="absolute top-2 left-2 bg-red-500 hover:bg-red-600">
+            <Badge className="absolute top-2 left-2 bg-red-500 hover:bg-red-600 text-white text-xs">
               Épuisé
             </Badge>
           )}
         </div>
       </Link>
 
-      <CardContent className="p-4">
+      {/* Product Content */}
+      <CardContent className="p-3 md:p-4 flex-1 flex flex-col">
         <Link href={`/produit/${id}`}>
-          <h3 className="font-semibold text-lg mb-2 group-hover:text-blue-600 transition-colors">
+          <h3 className="font-semibold text-sm md:text-base mb-2 group-hover:text-blue-600 transition-colors line-clamp-2">
             {name}
           </h3>
         </Link>
-        <p className="text-sm text-slate-600 mb-2 line-clamp-2">{description}</p>
+        <p className="text-xs md:text-sm text-slate-600 line-clamp-2 flex-1">
+          {description}
+        </p>
       </CardContent>
 
-      <CardFooter className="p-4 pt-0 flex items-center justify-between">
-        <span className="text-2xl font-bold text-blue-600">
+      {/* Product Footer */}
+      <CardFooter className="p-3 md:p-4 pt-0 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 md:gap-3">
+        <span className="text-xl md:text-2xl font-bold text-blue-600 order-2 sm:order-1">
           {price.toFixed(2)} €
         </span>
         <Button
           onClick={handleAdd}
           disabled={stock === 0}
-          className="gap-2"
+          className="gap-2 order-1 sm:order-2 w-full sm:w-auto text-xs md:text-sm h-9 md:h-10"
+          size="sm"
         >
           <ShoppingCart className="h-4 w-4" />
-          Ajouter
+          <span className="hidden sm:inline">Ajouter</span>
+          <span className="sm:hidden">+</span>
         </Button>
       </CardFooter>
     </Card>

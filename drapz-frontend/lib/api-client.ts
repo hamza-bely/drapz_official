@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { redirect } from 'next/navigation';
 
 const API_BASE_URL = 'http://localhost:8080/api/';
 
@@ -7,14 +8,34 @@ export const apiClient = axios.create({
     headers: {
         'Content-Type': 'application/json',
     },
+    withCredentials: true, // ✅ IMPORTANT: Envoyer automatiquement les cookies aux requêtes
 });
 
-// Intercepteur pour ajouter le token JWT aux requêtes
-apiClient.interceptors.request.use((config) => {
-    const token = localStorage.getItem('token');
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+/**
+ * Intercepteur pour les réponses avec erreurs
+ * Gère les erreurs 401 (non authentifié) en redirigeant vers la page de login
+ */
+apiClient.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        // Si erreur 401, l'utilisateur n'est pas authentifié ou la session a expiré
+        if (error.response?.status === 401) {
+            console.warn('Session expirée ou utilisateur non authentifié');
+            // Rediriger vers la page de login
+            if (typeof window !== 'undefined') {
+                window.location.href = '/auth/login?redirect=' + encodeURIComponent(window.location.pathname);
+            }
+        }
+        return Promise.reject(error);
     }
+);
+
+/**
+ * Intercepteur pour ajouter le token JWT aux requêtes
+ * NOTE: Avec les cookies HttpOnly, le token est automatiquement envoyé
+ */
+apiClient.interceptors.request.use((config) => {
+    // ✅ Le token est automatiquement dans le cookie HttpOnly
     return config;
 });
 
@@ -29,9 +50,13 @@ export const catalogueApi = {
 // API Authentification
 export const authApi = {
     login: (email: string, motDePasse: string) =>
-        apiClient.post('/api/auth/connexion', { email, motDePasse }),
+        apiClient.post('api/auth/connexion', { email, motDePasse }),
     register: (userData: { email: string; motDePasse: string; nom: string; prenom: string }) =>
-        apiClient.post('/api/auth/inscription', userData),
+        apiClient.post('auth/inscription', userData),
+    getCurrentUser: () =>
+        apiClient.get('auth/me'), // ✅ Nouveau endpoint
+    logout: () =>
+        apiClient.post('auth/logout'), // ✅ Nouveau endpoint
 };
 
 // API Paiement
