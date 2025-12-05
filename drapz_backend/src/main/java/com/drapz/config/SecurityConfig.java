@@ -32,38 +32,6 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
-    // Définition des chemins publics pour l'API et Swagger.
-    private static final String[] PUBLIC_URLS = {
-            // NOTE IMPORTANTE: Les routes /api/v1/auth/** ont été retirées d'ici
-            // et gérées de manière plus spécifique ci-dessous (POST pour inscription/connexion).
-
-            // Routes d'API publiques restantes
-            "api/produits/**",
-            "/api/v1/paiement/webhook",
-
-            // Chemins Swagger/OpenAPI (avec le context-path /api)
-            "/api/v1/api-docs/**",
-            "/api/v3/api-docs/**",
-            "/api/v1/swagger-ui.html",
-            "/api/swagger-ui/**",
-            "/api/webjars/**",
-            "/api/swagger-resources/**",
-
-            // Chemins statiques de base (pour le cas où le context-path n'est pas appliqué)
-            "/v1/api-docs/**",
-            "/v1/swagger-ui.html",
-            "/v1/swagger-ui/**",
-            "/v2/api-docs",
-            "/v3/api-docs",
-            "/v3/api-docs/**",
-            "/swagger-resources",
-            "/swagger-resources/**",
-            "/configuration/ui",
-            "/configuration/security",
-            "/swagger-ui.html",
-            "/webjars/**"
-    };
-
     /**
      * Configure la chaîne de filtres de sécurité.
      */
@@ -71,33 +39,48 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-                // 1. Désactiver le CSRF (car nous utilisons des tokens JWT)
                 .csrf(AbstractHttpConfigurer::disable)
-
-                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // ✅ Activer CORS
-
-
-                // 2. Gérer les exceptions d'authentification
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 )
-
-                // 3. Définir la politique de session à STATELESS (sans état)
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-
-                // 4. Configurer les règles d'autorisation HTTP
                 .authorizeHttpRequests(authorize -> authorize
 
                         .requestMatchers(HttpMethod.POST, "/api/auth/inscription").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/connexion").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/produits/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/auth/me").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/logout").authenticated()
+                        
+                        // Produits - publics en lecture
+                        .requestMatchers(HttpMethod.GET, "/api/produits").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/produits/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/produits/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/produits/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/produits/**").hasRole("ADMIN")
 
-                        .requestMatchers(PUBLIC_URLS).permitAll()
-
-                        .requestMatchers("/api/v1/commandes/**").hasRole("USER")
-                        .requestMatchers("/api/v1/paiement/creer-session").hasRole("USER")
+                        // Pays - publics en lecture
+                        .requestMatchers(HttpMethod.GET, "/api/pays").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/pays/**").permitAll()
+                        
+                        // Paiement
+                        .requestMatchers(HttpMethod.POST, "/api/paiement/creer-session").hasRole("USER")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/paiement/webhook").permitAll()
+                        
+                        // Commandes
+                        .requestMatchers(HttpMethod.GET, "/api/commandes").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET, "/api/commandes/**").hasRole("USER")
+                        .requestMatchers(HttpMethod.POST, "/api/commandes").hasRole("USER")
+                        
+                        // Swagger
+                        .requestMatchers("/api/v1/api-docs/**").permitAll()
+                        .requestMatchers("/api/v3/api-docs/**").permitAll()
+                        .requestMatchers("/api/v1/swagger-ui.html").permitAll()
+                        .requestMatchers("/api/swagger-ui/**").permitAll()
+                        .requestMatchers("/api/webjars/**").permitAll()
+                        .requestMatchers("/api/swagger-resources/**").permitAll()
 
                         .anyRequest().authenticated()
                 )
@@ -130,10 +113,12 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4000", "https://ton-domaine-front.com")); // ✅ Ajoute ton front
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4000", "http://localhost:3000", "https://ton-domaine-front.com")); // ✅ Ajoute ton front
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
-        configuration.setAllowCredentials(true);
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept", "X-Requested-With"));
+        configuration.setExposedHeaders(Arrays.asList("Authorization", "Set-Cookie")); // ✅ Expose les Set-Cookie
+        configuration.setAllowCredentials(true); // ✅ IMPORTANT pour les cookies
+        configuration.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

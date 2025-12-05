@@ -42,15 +42,23 @@ apiClient.interceptors.request.use((config) => {
 // API Catalogue
 export const catalogueApi = {
     getProduits: (page = 0, size = 10) =>
-        apiClient.get(`api/produits?page=${page}&size=${size}`),
+        apiClient.get(`produits?page=${page}&size=${size}`),
     getProduit: (id: string) =>
-        apiClient.get(`api/produits/${id}`),
+        apiClient.get(`produits/${id}`),
+};
+
+// API Pays
+export const paysApi = {
+    getTousPays: () =>
+        apiClient.get('pays'),
+    getPaysParCode: (code: string) =>
+        apiClient.get(`pays/${code}`),
 };
 
 // API Authentification
 export const authApi = {
     login: (email: string, motDePasse: string) =>
-        apiClient.post('api/auth/connexion', { email, motDePasse }),
+        apiClient.post('auth/connexion', { email, motDePasse }),
     register: (userData: { email: string; motDePasse: string; nom: string; prenom: string }) =>
         apiClient.post('auth/inscription', userData),
     getCurrentUser: () =>
@@ -62,13 +70,13 @@ export const authApi = {
 // API Paiement
 export const paiementApi = {
     creerSession: (articles: Array<{ produitId: string; quantite: number }>) =>
-        apiClient.post('api/paiement/creer-session', { articles }),
+        apiClient.post('paiement/creer-session', { articles }),
 };
 
 // API Commandes
 export const commandesApi = {
     getMesCommandes: (page = 0, size = 10) =>
-        apiClient.get(`api/commandes?page=${page}&size=${size}`),
+        apiClient.get(`commandes?page=${page}&size=${size}`),
     getCommande: (id: string) =>
-        apiClient.get(`api/commandes/${id}`),
+        apiClient.get(`commandes/${id}`),
 };

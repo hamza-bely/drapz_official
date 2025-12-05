@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from "next/image";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -10,11 +11,7 @@ export function Footer() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 mb-8">
           {/* Branding Section */}
           <div className="space-y-4">
-            <Link href="/" className="flex items-center gap-2 font-bold text-lg md:text-xl">
-              <span className="bg-gradient-to-r from-blue-600 to-red-600 bg-clip-text text-transparent">
-                Drapz
-              </span>
-            </Link>
+
             <p className="text-sm text-slate-600 leading-relaxed">
               Votre destination pour des drapeaux de qualité supérieure. Livraison rapide dans toute la France.
             </p>

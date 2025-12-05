@@ -22,4 +22,5 @@ public class ProduitResponse {
     private Boolean actif;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private PaysInfoResponse pays;
 }

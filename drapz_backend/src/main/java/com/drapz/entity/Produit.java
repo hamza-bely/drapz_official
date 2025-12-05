@@ -24,7 +24,7 @@ public class Produit {
     @Column(nullable = false)
     private String nom;
 
-    @Column(nullable = false)
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @Column(nullable = false, precision = 10, scale = 2)
@@ -35,6 +35,10 @@ public class Produit {
 
     @Column(name = "image_url")
     private String imageUrl;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "pays_id", nullable = true)
+    private Pays pays;
 
     @Column(nullable = false)
     private Boolean actif;

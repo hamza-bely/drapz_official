@@ -28,14 +28,25 @@ public class ProduitController {
     public ResponseEntity<Page<ProduitResponse>> obtenirProduits(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return ResponseEntity.ok(produitService.obtenirProduits(pageable));
+        try {
+            Pageable pageable = PageRequest.of(page, size);
+            return ResponseEntity.ok(produitService.obtenirProduits(pageable));
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Récupérer un produit par son ID")
     public ResponseEntity<ProduitResponse> obtenirProduit(@PathVariable String id) {
         return ResponseEntity.ok(produitService.obtenirProduitParId(id));
+    }
+
+    @GetMapping("/pays/{paysCode}")
+    @Operation(summary = "Récupérer le produit d'un pays par son code")
+    public ResponseEntity<ProduitResponse> obtenirProduitParPays(@PathVariable String paysCode) {
+        return ResponseEntity.ok(produitService.obtenirProduitParPaysCode(paysCode));
     }
 
     @PostMapping

@@ -35,16 +35,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     useEffect(() => {
         const initializeAuth = async () => {
             try {
-                console.log('🔍 Vérification de la session utilisateur...');
                 const userData = await getCurrentUser();
-                console.log('✅ Utilisateur connecté:', userData.email);
                 setUser(userData);
                 setIsAuthenticated(true);
-                // TODO: Vérifier si l'utilisateur est admin selon ses rôles
                 setIsAdmin(false);
             } catch (error: any) {
-                // L'utilisateur n'est pas connecté ou le token a expiré
-                console.log('❌ Utilisateur non connecté ou session expirée:', error.message);
                 setUser(null);
                 setIsAuthenticated(false);
                 setIsAdmin(false);
@@ -59,13 +54,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const handleSetUser = (newUser: AuthResponse | null) => {
         setUser(newUser);
         setIsAuthenticated(newUser !== null);
-        // ✅ Pas d'appel à localStorage - les infos sont servies du backend
     };
 
     const logout = async () => {
         try {
             await authLogout(); // Appel au backend pour supprimer le cookie
-            console.log('✅ Déconnexion réussie');
         } catch (error) {
             console.error('❌ Erreur lors de la déconnexion:', error);
         } finally {

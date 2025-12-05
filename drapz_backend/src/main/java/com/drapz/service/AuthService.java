@@ -76,4 +76,21 @@ public class AuthService {
             .prenom(utilisateur.getPrenom())
             .build();
     }
+
+    /**
+     * Récupérer les infos de l'utilisateur connecté basé sur l'email du token JWT
+     */
+    public AuthResponse getCurrentUser(String email) {
+        log.info("Récupération des infos pour: {}", email);
+
+        Utilisateur utilisateur = utilisateurRepository.findByEmail(email)
+            .orElseThrow(() -> new ApiException("Utilisateur non trouvé"));
+
+        return AuthResponse.builder()
+            .token(null) // ❌ Ne pas retourner le token
+            .email(utilisateur.getEmail())
+            .nom(utilisateur.getNom())
+            .prenom(utilisateur.getPrenom())
+            .build();
+    }
 }

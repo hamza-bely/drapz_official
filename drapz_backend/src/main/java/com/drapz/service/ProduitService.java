@@ -32,6 +32,15 @@ public class ProduitService {
         return convertToResponse(produit);
     }
 
+    public ProduitResponse obtenirProduitParPaysCode(String paysCode) {
+        log.info("Récupération du produit pour le pays: {}", paysCode);
+        Produit produit = produitRepository.findByPaysCode(paysCode);
+        if (produit == null) {
+            throw new ResourceNotFoundException("Aucun produit trouvé pour le pays: " + paysCode);
+        }
+        return convertToResponse(produit);
+    }
+
     @Transactional
     public ProduitResponse creerProduit(ProduitRequest request) {
         log.info("Création d'un nouveau produit: {}", request.getNom());
@@ -84,6 +93,18 @@ public class ProduitService {
     }
 
     private ProduitResponse convertToResponse(Produit produit) {
+        com.drapz.dto.PaysInfoResponse paysInfo = null;
+        if (produit.getPays() != null) {
+            paysInfo = com.drapz.dto.PaysInfoResponse.builder()
+                .id(produit.getPays().getId())
+                .nom(produit.getPays().getNom())
+                .code(produit.getPays().getCode())
+                .latitude(produit.getPays().getLatitude())
+                .longitude(produit.getPays().getLongitude())
+                .flagUrl(produit.getPays().getFlagUrl())
+                .build();
+        }
+
         return ProduitResponse.builder()
             .id(produit.getId())
             .nom(produit.getNom())
@@ -94,6 +115,7 @@ public class ProduitService {
             .actif(produit.getActif())
             .createdAt(produit.getCreatedAt())
             .updatedAt(produit.getUpdatedAt())
+            .pays(paysInfo)
             .build();
     }
 }

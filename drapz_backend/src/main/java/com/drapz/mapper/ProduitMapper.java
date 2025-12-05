@@ -2,6 +2,7 @@ package com.drapz.mapper;
 
 import com.drapz.dto.ProduitRequest;
 import com.drapz.dto.ProduitResponse;
+import com.drapz.dto.PaysInfoResponse;
 import com.drapz.entity.Produit;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +21,18 @@ public class ProduitMapper {
     }
 
     public ProduitResponse toResponse(Produit produit) {
+        PaysInfoResponse paysInfo = null;
+        if (produit.getPays() != null) {
+            paysInfo = PaysInfoResponse.builder()
+                .id(produit.getPays().getId())
+                .nom(produit.getPays().getNom())
+                .code(produit.getPays().getCode())
+                .latitude(produit.getPays().getLatitude())
+                .longitude(produit.getPays().getLongitude())
+                .flagUrl(produit.getPays().getFlagUrl())
+                .build();
+        }
+
         return ProduitResponse.builder()
             .id(produit.getId())
             .nom(produit.getNom())
@@ -30,6 +43,7 @@ public class ProduitMapper {
             .actif(produit.getActif())
             .createdAt(produit.getCreatedAt())
             .updatedAt(produit.getUpdatedAt())
+            .pays(paysInfo)
             .build();
     }
 }

@@ -19,7 +19,6 @@ export function Header() {
 
   const navLinks = [
     { href: '/catalogue', label: 'Catalogue' },
-    { href: '/catalogue?category=drapeaux-nationaux', label: 'Nationaux' },
     { href: '/catalogue?category=drapeaux-personnalises', label: 'Personnalisés' },
     { href: '/nationalite', label: 'Nationalités' },
   ];
@@ -37,7 +36,6 @@ export function Header() {
                 className="object-contain"
               />
             </div>
-            <span className="hidden sm:inline text-lg font-bold bg-gradient-to-r from-blue-600 to-red-600 bg-clip-text text-transparent">Drapz</span>
           </Link>
 
           <nav className="hidden lg:flex items-center gap-6 flex-1 mx-8">
