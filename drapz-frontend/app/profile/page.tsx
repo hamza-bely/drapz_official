@@ -17,22 +17,24 @@ interface Adresse {
 }
 
 export default function ProfilePage() {
-  const { user, loading } = useAuth();
+  const { user } = useAuth();
   const { toast } = useToast();
   const [orders, setOrders] = useState<any[]>([]);
   const [loadingOrders, setLoadingOrders] = useState(false);
+  const [address, setAddress] = useState<Adresse>({ ligne1: '', ville: '', codePostal: '', pays: '' });
 
   useEffect(() => {
     // Load address from localStorage (simple local fallback)
     try {
       const raw = localStorage.getItem('shippingAddress');
+      if (raw) setAddress(JSON.parse(raw));
     } catch (e) {
       // ignore
     }
   }, []);
 
   useEffect(() => {
-   // if (!user) return;
+    if (!user) return;
 
     const fetchOrders = async () => {
       setLoadingOrders(true);
@@ -51,9 +53,24 @@ export default function ProfilePage() {
     fetchOrders();
   }, [user]);
 
+  const saveAddress = () => {
+    try {
+      localStorage.setItem('shippingAddress', JSON.stringify(address));
+      toast({
+        title: 'Succès',
+        description: 'Adresse enregistrée',
+      });
+    } catch (e) {
+      console.error(e);
+      toast({
+        title: 'Erreur',
+        description: 'Erreur lors de l\'enregistrement',
+        variant: 'destructive',
+      });
+    }
+  };
 
-
-  if (!user && !loading) {
+  if (!user) {
     return (
       <div className="container mx-auto px-4 py-12 md:py-20 min-h-[calc(100vh-200px)] flex items-center justify-center">
         <Card className="w-full max-w-md p-6 text-center">
@@ -65,14 +82,6 @@ export default function ProfilePage() {
             <Button className="w-full">Se connecter</Button>
           </Link>
         </Card>
-      </div>
-    );
-  }
-
-  if (loading) {
-    return (
-      <div className="container mx-auto px-4 py-12 md:py-20 min-h-[calc(100vh-200px)] flex items-center justify-center">
-        <p className="text-gray-600">Chargement du profil...</p>
       </div>
     );
   }
@@ -120,6 +129,60 @@ export default function ProfilePage() {
         </Card>
 
         {/* Shipping Address */}
+        <Card className="sm:col-span-2 lg:col-span-1">
+          <CardContent className="p-4 md:p-6">
+            <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+              📍 Adresse de livraison
+            </h2>
+            <div className="space-y-3">
+              <div>
+                <label className="text-xs md:text-sm font-medium text-slate-700">Adresse</label>
+                <Input
+                  type="text"
+                  placeholder="123 Rue de la Paix"
+                  value={address.ligne1}
+                  onChange={(e) => setAddress({ ...address, ligne1: e.target.value })}
+                  className="mt-1"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="text-xs md:text-sm font-medium text-slate-700">Ville</label>
+                  <Input
+                    type="text"
+                    placeholder="Paris"
+                    value={address.ville}
+                    onChange={(e) => setAddress({ ...address, ville: e.target.value })}
+                    className="mt-1"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs md:text-sm font-medium text-slate-700">Code postal</label>
+                  <Input
+                    type="text"
+                    placeholder="75000"
+                    value={address.codePostal}
+                    onChange={(e) => setAddress({ ...address, codePostal: e.target.value })}
+                    className="mt-1"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="text-xs md:text-sm font-medium text-slate-700">Pays</label>
+                <Input
+                  type="text"
+                  placeholder="France"
+                  value={address.pays}
+                  onChange={(e) => setAddress({ ...address, pays: e.target.value })}
+                  className="mt-1"
+                />
+              </div>
+              <Button onClick={saveAddress} size="sm" className="w-full h-9 md:h-10">
+                💾 Enregistrer l'adresse
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Quick Links */}
         <Card className="sm:col-span-2 lg:col-span-1">

@@ -4,7 +4,24 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   webpack: (config, { isServer }) => {
-    // No special handling for Cesium (removed)
+    // Handle Cesium modules
+    config.module.rules.push({
+      test: /\.js$/,
+      enforce: 'pre',
+      exclude: /node_modules(?!\/cesium)/,
+      use: {
+        loader: 'source-map-loader',
+      },
+    });
+
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        path: false,
+        crypto: false,
+      };
+    }
 
     return config;
   },

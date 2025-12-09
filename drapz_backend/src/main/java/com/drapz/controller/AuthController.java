@@ -4,8 +4,6 @@ import com.drapz.dto.AuthRequest;
 import com.drapz.dto.AuthResponse;
 import com.drapz.dto.InscriptionRequest;
 import com.drapz.service.AuthService;
-import com.drapz.dto.PasswordResetRequest;
-import com.drapz.dto.PasswordResetConfirmRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
@@ -73,21 +71,6 @@ public class  AuthController {
         
         AuthResponse response = authService.getCurrentUser(authentication.getName());
         return ResponseEntity.ok(response);
-    }
-
-    @PostMapping("/reset-request")
-    @Operation(summary = "Demande de réinitialisation de mot de passe (envoie un lien par email)")
-    public ResponseEntity<Void> requestPasswordReset(@Valid @RequestBody PasswordResetRequest request) {
-        // Pour l'instant on logue le lien. Vous pouvez remplacer frontendBaseUrl par une valeur de config.
-        authService.requestPasswordReset(request.getEmail(), "http://localhost:3000");
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping("/reset-confirm")
-    @Operation(summary = "Confirmer la réinitialisation avec token + nouveau mot de passe")
-    public ResponseEntity<Void> confirmPasswordReset(@Valid @RequestBody PasswordResetConfirmRequest request) {
-        authService.confirmPasswordReset(request.getToken(), request.getNouveauMotDePasse());
-        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/logout")

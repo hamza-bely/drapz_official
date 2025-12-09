@@ -3,7 +3,7 @@ import { AuthRequest, AuthResponse, InscriptionRequest } from "@/types/api";
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api/';
 
 export async function login(credentials: AuthRequest): Promise<AuthResponse> {
-    const response = await fetch(`${API_URL}/auth/connexion`, {
+    const response = await fetch(`${API_URL}/api/auth/connexion`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -21,7 +21,7 @@ export async function login(credentials: AuthRequest): Promise<AuthResponse> {
 }
 
 export async function register(userData: InscriptionRequest): Promise<AuthResponse> {
-    const response = await fetch(`${API_URL}/auth/inscription`, {
+    const response = await fetch(`${API_URL}/api/auth/inscription`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -38,8 +38,12 @@ export async function register(userData: InscriptionRequest): Promise<AuthRespon
     return data;
 }
 
+/**
+ * Récupérer les infos de l'utilisateur connecté depuis le backend
+ * Le token est automatiquement envoyé via le cookie HttpOnly
+ */
 export async function getCurrentUser(): Promise<AuthResponse> {
-    const response = await fetch(`${API_URL}/auth/me`, {
+    const response = await fetch(`${API_URL}/api/auth/me`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -54,6 +58,9 @@ export async function getCurrentUser(): Promise<AuthResponse> {
     return response.json();
 }
 
+/**
+ * Déconnexion - supprime le cookie côté serveur
+ */
 export async function logout(): Promise<void> {
     await fetch(`${API_URL}/auth/logout`, {
         method: 'POST',
@@ -61,26 +68,20 @@ export async function logout(): Promise<void> {
     });
 }
 
-export async function requestPasswordReset(email: string): Promise<void> {
-    const response = await fetch(`${API_URL}/auth/reset-request`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-    });
-
-    if (!response.ok) {
-        throw new Error('Échec de la demande de réinitialisation');
-    }
+/**
+ * Ces fonctions ne sont plus utilisées avec les cookies HttpOnly
+ */
+export function setToken(token: string) {
+    // ❌ Non utilisé - le token est géré via les cookies HttpOnly
+    console.warn('setToken n\'est plus nécessaire avec les cookies HttpOnly');
 }
 
-export async function confirmPasswordReset(token: string, nouveauMotDePasse: string): Promise<void> {
-    const response = await fetch(`${API_URL}/auth/reset-confirm`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token, nouveauMotDePasse }),
-    });
+export function getToken(): string | null {
+    // ❌ Non utilisé - le token est en cookie HttpOnly et automatiquement envoyé
+    return null;
+}
 
-    if (!response.ok) {
-        throw new Error('Échec de la confirmation de réinitialisation');
-    }
+export function removeToken() {
+    // ❌ Non utilisé - le logout supprime le cookie côté serveur
+    console.warn('removeToken n\'est plus nécessaire avec les cookies HttpOnly');
 }

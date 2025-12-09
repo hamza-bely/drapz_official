@@ -11,24 +11,17 @@
 -- =====================================================
 
 -- Ensure extension for gen_random_uuid()
-
--- Activer l'extension pour gen_random_uuid()
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
--- Table adaptée à l'entité @Table(name = "utilisateurs")
-CREATE TABLE IF NOT EXISTS utilisateurs (
-                                            id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-                                            email VARCHAR(255) NOT NULL UNIQUE,
-                                            mot_de_passe VARCHAR(255) NOT NULL,
-                                            nom VARCHAR(100) NOT NULL,
-                                            prenom VARCHAR(100) NOT NULL,
-                                            role VARCHAR(50) NOT NULL,
-                                            actif BOOLEAN NOT NULL DEFAULT TRUE,
-                                            created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-                                            updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
-                                            CONSTRAINT role_chk CHECK (role IN ('USER', 'ADMIN'))
+CREATE TABLE IF NOT EXISTS utilisateur (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    role VARCHAR(50) NOT NULL DEFAULT 'USER',
+    actif BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
-
 
 CREATE TABLE IF NOT EXISTS pays (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -70,25 +63,14 @@ CREATE INDEX IF NOT EXISTS idx_produits_nom ON produits(nom);
 -- =====================================================
 
 -- Admin user (password: admin123)
+INSERT INTO utilisateur (id, email, password, role, actif, created_at, updated_at)
+SELECT '550e8400-e29b-41d4-a716-446655440000'::UUID, 'admin@drapz.com', '$2a$10$slYQmyNdGzin7olVN3/p2OPST9/PgBkqquzi.Ss8KIUgO2t0jKMm2', 'ADMIN', true, NOW(), NOW()
+WHERE NOT EXISTS (SELECT 1 FROM utilisateur WHERE email = 'admin@drapz.com');
 
-INSERT INTO utilisateurs (id, email, mot_de_passe, nom, prenom, role, actif, created_at, updated_at)
-VALUES (
-           '550e8400-e29b-41d4-a716-446655440000'::UUID,
-           'admin@drapz.com',
-           '$2a$10$slYQmyNdGzin7olVN3/p2OPST9/PgBkqquzi.Ss8KIUgO2t0jKMm2',
-           'Admin', 'Drapz',
-           'ADMIN',
-           TRUE,
-           NOW(), NOW()
-       )
-ON CONFLICT (email) DO UPDATE SET
-                                  mot_de_passe = EXCLUDED.mot_de_passe,
-                                  nom          = EXCLUDED.nom,
-                                  prenom       = EXCLUDED.prenom,
-                                  role         = EXCLUDED.role,
-                                  actif        = EXCLUDED.actif,
-                                  updated_at   = NOW();
-
+-- Regular user (password: user123)
+INSERT INTO utilisateur (id, email, password, role, actif, created_at, updated_at)
+SELECT '550e8400-e29b-41d4-a716-446655440001'::UUID, 'user@drapz.com', '$2a$10$O8XLbXYmLIpV9jgVdRlN1OFd6Pw0hB9L7cKVVH2QVYfqV9H2H7Z3i', 'USER', true, NOW(), NOW()
+WHERE NOT EXISTS (SELECT 1 FROM utilisateur WHERE email = 'user@drapz.com');
 
 -- =====================================================
 -- 4. INSERT ALL COUNTRIES (201 countries/regions)

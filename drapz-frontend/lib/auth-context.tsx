@@ -38,7 +38,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 const userData = await getCurrentUser();
                 setUser(userData);
                 setIsAuthenticated(true);
-                setIsAdmin(userData?.role === 'ADMIN');
+                setIsAdmin(false);
             } catch (error: any) {
                 setUser(null);
                 setIsAuthenticated(false);
@@ -54,7 +54,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const handleSetUser = (newUser: AuthResponse | null) => {
         setUser(newUser);
         setIsAuthenticated(newUser !== null);
-        setIsAdmin(newUser?.role === 'ADMIN');
     };
 
     const logout = async () => {

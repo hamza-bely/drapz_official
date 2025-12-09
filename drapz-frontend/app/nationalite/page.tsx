@@ -5,7 +5,13 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import dynamic from 'next/dynamic';
 import { apiClient } from '@/lib/api-client';
+
+const CesiumComponent = dynamic(() => import('@/components/cesium-map'), {
+  ssr: false,
+  loading: () => <div className="w-full h-full flex items-center justify-center bg-blue-50 text-blue-600 font-semibold">Chargement de la carte...</div>,
+});
 
 interface Country {
   id: string;
@@ -56,7 +62,7 @@ export default function CountriesMapPage() {
   useEffect(() => {
     const fetchCountries = async () => {
       try {
-        const response = await apiClient.get<Country[]>('/pays');
+        const response = await apiClient.get<Country[]>('api/pays');
         setCountries(response.data);
         setLoading(false);
       } catch (error) {
@@ -110,22 +116,10 @@ export default function CountriesMapPage() {
             Chargement des pays...
           </div>
         ) : (
-          <div className="p-6">
-            <p className="text-center text-blue-600 font-semibold mb-4">La vue carte interactive a été retirée. Voici la liste des pays disponibles :</p>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-              {countries.map((c) => (
-                <button
-                  key={c.id}
-                  onClick={() => handleCountryClick(c)}
-                  className="flex flex-col items-center p-3 bg-white rounded-lg shadow-sm border hover:shadow-md transition">
-                  <div className="w-full h-24 relative mb-2 overflow-hidden rounded">
-                    <img src={c.flagUrl} alt={`Drapeau ${c.nom}`} className="object-cover w-full h-full" />
-                  </div>
-                  <div className="text-sm font-semibold text-gray-700">{c.nom}</div>
-                </button>
-              ))}
-            </div>
-          </div>
+          <CesiumComponent
+            countries={countries}
+            onCountryClick={handleCountryClick}
+          />
         )}
 
         {popup.visible && popup.country && (
