@@ -3,28 +3,33 @@ import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
     const token = request.cookies.get('token')?.value;
-    const isAuthPage = request.nextUrl.pathname.startsWith('/auth');
-    const isAdminPage = request.nextUrl.pathname.startsWith('/admin');
+    const pathname = request.nextUrl.pathname;
+    const isAuthPage = pathname.startsWith('/auth');
+    const isAdminLoginPage = pathname === '/admin123';
+    const isAdminPage = pathname.startsWith('/admin');
 
-    if (!token && !isAuthPage) {
-        return NextResponse.redirect(new URL('/auth/login', request.url));
+    // Pages publiques: auth et admin login
+    if (isAuthPage || isAdminLoginPage) {
+        // Si connecté et sur une page auth, rediriger vers l'accueil
+        if (token && isAuthPage) {
+            return NextResponse.redirect(new URL('/', request.url));
+        }
+        return NextResponse.next();
     }
 
-    if (token && isAuthPage) {
-        return NextResponse.redirect(new URL('/', request.url));
-    }
-
-    // For admin routes, you might want to verify the token and check the role
-    if (isAdminPage) {
-        // TODO: Implement proper role verification
-        if (!token) {
-            return NextResponse.redirect(new URL('/auth/login', request.url));
+    // Routes protégées pour utilisateurs connectés
+    console.log(token)
+    if (!token) {
+        // Admin page: rediriger vers login admin
+        if (isAdminPage) {
+            return NextResponse.redirect(new URL('/admin123', request.url));
         }
     }
 
+    // Si connecté, laisser passer (la vérification de rôle se fait côté client)
     return NextResponse.next();
 }
 
 export const config = {
-    matcher: ['/admin/:path*', '/auth/:path*'],
+    matcher: ['/admin/:path*', '/admin123', '/auth/:path*', '/profile/:path*', '/panier/:path*', '/catalogue/:path*', '/commande/:path*'],
 };

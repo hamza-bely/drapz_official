@@ -23,7 +23,7 @@ apiClient.interceptors.response.use(
             console.warn('Session expirée ou utilisateur non authentifié');
             // Rediriger vers la page de login
             if (typeof window !== 'undefined') {
-                window.location.href = '/auth/login?redirect=' + encodeURIComponent(window.location.pathname);
+                //window.location.href = '/auth/login?redirect=' + encodeURIComponent(window.location.pathname);
             }
         }
         return Promise.reject(error);
@@ -55,17 +55,7 @@ export const paysApi = {
         apiClient.get(`pays/${code}`),
 };
 
-// API Authentification
-export const authApi = {
-    login: (email: string, motDePasse: string) =>
-        apiClient.post('auth/connexion', { email, motDePasse }),
-    register: (userData: { email: string; motDePasse: string; nom: string; prenom: string }) =>
-        apiClient.post('auth/inscription', userData),
-    getCurrentUser: () =>
-        apiClient.get('auth/me'), // ✅ Nouveau endpoint
-    logout: () =>
-        apiClient.post('auth/logout'), // ✅ Nouveau endpoint
-};
+
 
 // API Paiement
 export const paiementApi = {
