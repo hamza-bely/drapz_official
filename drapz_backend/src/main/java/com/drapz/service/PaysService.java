@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class PaysService {
+
     private final PaysRepository paysRepository;
     private final PaysMapper paysMapper;
 

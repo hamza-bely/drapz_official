@@ -39,7 +39,6 @@ public class PaiementController {
             @Valid @RequestBody CreerSessionRequest request,
             Authentication authentication) {
         String utilisateurId = ((UserDetails) authentication.getPrincipal()).getUsername();
-        String u = utilisateurId;
         CreerSessionResponse response = commandeService.creerSessionPaiement(utilisateurId, request);
         return ResponseEntity.ok(response);
     }

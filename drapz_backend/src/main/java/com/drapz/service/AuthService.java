@@ -17,6 +17,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * @deprecated Utiliser UserService à la place
+ * Cette classe est archivée et maintenue pour la compatibilité backward
+ */
+@Deprecated
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -77,9 +82,6 @@ public class AuthService {
             .build();
     }
 
-    /**
-     * Récupérer les infos de l'utilisateur connecté basé sur l'email du token JWT
-     */
     public AuthResponse getCurrentUser(String email) {
         log.info("Récupération des infos pour: {}", email);
 
@@ -87,7 +89,6 @@ public class AuthService {
             .orElseThrow(() -> new ApiException("Utilisateur non trouvé"));
 
         return AuthResponse.builder()
-            .token(null) // ❌ Ne pas retourner le token
             .email(utilisateur.getEmail())
             .nom(utilisateur.getNom())
             .prenom(utilisateur.getPrenom())

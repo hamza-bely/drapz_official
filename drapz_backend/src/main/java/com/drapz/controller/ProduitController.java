@@ -2,6 +2,7 @@ package com.drapz.controller;
 
 import com.drapz.dto.ProduitRequest;
 import com.drapz.dto.ProduitResponse;
+import com.drapz.service.AdminService;
 import com.drapz.service.ProduitService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -22,19 +23,15 @@ import org.springframework.web.bind.annotation.*;
 public class ProduitController {
 
     private final ProduitService produitService;
+    private final AdminService adminService;
 
     @GetMapping
     @Operation(summary = "Récupérer la liste des produits disponibles")
     public ResponseEntity<Page<ProduitResponse>> obtenirProduits(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        try {
-            Pageable pageable = PageRequest.of(page, size);
-            return ResponseEntity.ok(produitService.obtenirProduits(pageable));
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw e;
-        }
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(produitService.obtenirProduits(pageable));
     }
 
     @GetMapping("/{id}")
@@ -53,7 +50,7 @@ public class ProduitController {
     @SecurityRequirement(name = "bearer-jwt")
     @Operation(summary = "Créer un nouveau produit (ADMIN uniquement)")
     public ResponseEntity<ProduitResponse> creerProduit(@Valid @RequestBody ProduitRequest request) {
-        ProduitResponse response = produitService.creerProduit(request);
+        ProduitResponse response = adminService.creerProduit(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -63,7 +60,7 @@ public class ProduitController {
     public ResponseEntity<ProduitResponse> mettreAJourProduit(
             @PathVariable String id,
             @Valid @RequestBody ProduitRequest request) {
-        ProduitResponse response = produitService.mettreAJourProduit(id, request);
+        ProduitResponse response = adminService.mettreAJourProduit(id, request);
         return ResponseEntity.ok(response);
     }
 
@@ -71,7 +68,7 @@ public class ProduitController {
     @SecurityRequirement(name = "bearer-jwt")
     @Operation(summary = "Supprimer un produit (ADMIN uniquement)")
     public ResponseEntity<Void> supprimerProduit(@PathVariable String id) {
-        produitService.supprimerProduit(id);
+        adminService.supprimerProduit(id);
         return ResponseEntity.noContent().build();
     }
 }

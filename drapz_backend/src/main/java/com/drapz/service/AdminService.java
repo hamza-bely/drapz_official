@@ -1,0 +1,75 @@
+package com.drapz.service;
+
+import com.drapz.dto.ProduitRequest;
+import com.drapz.dto.ProduitResponse;
+import com.drapz.entity.Produit;
+import com.drapz.exception.ResourceNotFoundException;
+import com.drapz.repository.ProduitRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+@RequiredArgsConstructor
+@Slf4j
+public class AdminService {
+
+    private final ProduitRepository produitRepository;
+
+    @Transactional
+    public ProduitResponse creerProduit(ProduitRequest request) {
+        log.info("Création d'un nouveau produit: {}", request.getNom());
+        Produit produit = Produit.builder()
+            .nom(request.getNom())
+            .description(request.getDescription())
+            .prix(request.getPrix())
+            .stock(request.getStock())
+            .imageUrl(request.getImageUrl())
+            .actif(true)
+            .build();
+
+        produit = produitRepository.save(produit);
+        return convertToResponse(produit);
+    }
+
+    @Transactional
+    public ProduitResponse mettreAJourProduit(String id, ProduitRequest request) {
+        log.info("Mise à jour du produit: {}", id);
+        Produit produit = produitRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Produit non trouvé avec l'ID: " + id));
+
+        produit.setNom(request.getNom());
+        produit.setDescription(request.getDescription());
+        produit.setPrix(request.getPrix());
+        produit.setStock(request.getStock());
+        produit.setImageUrl(request.getImageUrl());
+
+        produit = produitRepository.save(produit);
+        return convertToResponse(produit);
+    }
+
+    @Transactional
+    public void supprimerProduit(String id) {
+        log.info("Suppression du produit: {}", id);
+        Produit produit = produitRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Produit non trouvé avec l'ID: " + id));
+
+        produit.setActif(false);
+        produitRepository.save(produit);
+    }
+
+    private ProduitResponse convertToResponse(Produit produit) {
+        return ProduitResponse.builder()
+            .id(produit.getId())
+            .nom(produit.getNom())
+            .description(produit.getDescription())
+            .prix(produit.getPrix())
+            .stock(produit.getStock())
+            .imageUrl(produit.getImageUrl())
+            .actif(produit.getActif())
+            .createdAt(produit.getCreatedAt())
+            .updatedAt(produit.getUpdatedAt())
+            .build();
+    }
+}
