@@ -8,7 +8,7 @@ export const apiClient = axios.create({
     headers: {
         'Content-Type': 'application/json',
     },
-    withCredentials: true, // ✅ IMPORTANT: Envoyer automatiquement les cookies aux requêtes
+    withCredentials: true,
 });
 apiClient.interceptors.response.use(
     (response) => response,
@@ -31,12 +31,3 @@ apiClient.interceptors.request.use((config) => {
     // ✅ Le token est automatiquement dans le cookie HttpOnly
     return config;
 });
-
-/**
- * @deprecated Utiliser les services dans @/lib/services/ à la place
- * Services disponibles:
- * - userService (authentification)
- * - productService (produits)
- * - countryService (pays)
- * - orderService (commandes et paiement)
- */

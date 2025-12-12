@@ -74,3 +74,11 @@ export interface InscriptionRequest {
     nom: string;
     prenom: string;
 }
+
+export interface UserResponse {
+    id: string;
+    email: string;
+    nom: string;
+    prenom: string;
+    role: string;
+}

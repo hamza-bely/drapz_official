@@ -18,20 +18,9 @@ interface Adresse {
 
 export default function ProfilePage() {
   const { user } = useAuth();
-  const { toast } = useToast();
+
   const [orders, setOrders] = useState<any[]>([]);
   const [loadingOrders, setLoadingOrders] = useState(false);
-  const [address, setAddress] = useState<Adresse>({ ligne1: '', ville: '', codePostal: '', pays: '' });
-
-  useEffect(() => {
-    // Load address from localStorage (simple local fallback)
-    try {
-      const raw = localStorage.getItem('shippingAddress');
-      if (raw) setAddress(JSON.parse(raw));
-    } catch (e) {
-      // ignore
-    }
-  }, []);
 
   useEffect(() => {
     if (!user) return;
@@ -52,23 +41,6 @@ export default function ProfilePage() {
 
     fetchOrders();
   }, [user]);
-
-  const saveAddress = () => {
-    try {
-      localStorage.setItem('shippingAddress', JSON.stringify(address));
-      toast({
-        title: 'Succès',
-        description: 'Adresse enregistrée',
-      });
-    } catch (e) {
-      console.error(e);
-      toast({
-        title: 'Erreur',
-        description: 'Erreur lors de l\'enregistrement',
-        variant: 'destructive',
-      });
-    }
-  };
 
   if (!user) {
     return (

@@ -2,11 +2,8 @@
 
 import './globals.css';
 import { Inter } from 'next/font/google';
-import { CartProvider } from '@/lib/cart-context';
 import { AuthProvider } from '@/lib/auth-context';
-import { Header } from '@/components/header';
-import { Footer } from '@/components/footer';
-import { Toaster } from '@/components/ui/toaster';
+import { AppContent } from '@/components/app-content';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -25,21 +22,7 @@ export default function RootLayout({
       </head>
       <body className={`${inter.className} antialiased bg-white text-foreground`}>
         <AuthProvider>
-          <CartProvider>
-            <div className="flex flex-col min-h-screen overflow-x-hidden">
-              {/* Header - Sticky */}
-              <Header />
-              
-              {/* Main Content - Flex grows */}
-              <main className="flex-1 w-full">
-                {children}
-              </main>
-              
-              {/* Footer */}
-              <Footer />
-            </div>
-          </CartProvider>
-          <Toaster />
+          <AppContent>{children}</AppContent>
         </AuthProvider>
       </body>
     </html>

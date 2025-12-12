@@ -2,7 +2,8 @@
 
 import { useAuth } from "@/lib/auth-context";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
+import {HeaderAdmin} from "@/components/headAdmin";
 
 export default function AdminDashboardPage() {
   const { isAdmin, loading, isAuthenticated } = useAuth();

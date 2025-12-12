@@ -10,7 +10,7 @@ import { useAuth } from "@/lib/auth-context";
 
 export default function AdminLoginPage() {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [motDePasse, setMotDePasse] = useState("");
   const [error, setError] = useState("");
   const router = useRouter();
   const { setUser } = useAuth();
@@ -20,7 +20,7 @@ export default function AdminLoginPage() {
     setError("");
 
     try {
-      const authResponse = await userService.login(email, password);
+      const authResponse = await userService.login(email, motDePasse);
       if (authResponse.role === "ADMIN") {
         setUser(authResponse);
         router.push("/admindrapz/dashboard");
@@ -53,8 +53,8 @@ export default function AdminLoginPage() {
             <Input
               id="password"
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={motDePasse}
+              onChange={(e) => setMotDePasse(e.target.value)}
               required
             />
           </div>

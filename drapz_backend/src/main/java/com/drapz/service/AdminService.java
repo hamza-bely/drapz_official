@@ -1,75 +1,76 @@
 package com.drapz.service;
 
-import com.drapz.dto.ProduitRequest;
-import com.drapz.dto.ProduitResponse;
-import com.drapz.entity.Produit;
-import com.drapz.exception.ResourceNotFoundException;
-import com.drapz.repository.ProduitRepository;
+import com.drapz.dto.CreateUserRequest;
+import com.drapz.dto.UpdateUserRequest;
+import com.drapz.entity.Utilisateur;
+import com.drapz.exception.ApiException;
+import com.drapz.repository.UtilisateurRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class AdminService {
 
-    private final ProduitRepository produitRepository;
+    private final UtilisateurRepository utilisateurRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    @Transactional
-    public ProduitResponse creerProduit(ProduitRequest request) {
-        log.info("Création d'un nouveau produit: {}", request.getNom());
-        Produit produit = Produit.builder()
-            .nom(request.getNom())
-            .description(request.getDescription())
-            .prix(request.getPrix())
-            .stock(request.getStock())
-            .imageUrl(request.getImageUrl())
-            .actif(true)
-            .build();
+    public List<Utilisateur> getUsers() {
+        return utilisateurRepository.findAll();
+    }
 
-        produit = produitRepository.save(produit);
-        return convertToResponse(produit);
+    public Utilisateur getUserById(String id) {
+        return utilisateurRepository.findById(id)
+                .orElseThrow(() -> new ApiException("Utilisateur non trouvé"));
     }
 
     @Transactional
-    public ProduitResponse mettreAJourProduit(String id, ProduitRequest request) {
-        log.info("Mise à jour du produit: {}", id);
-        Produit produit = produitRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Produit non trouvé avec l'ID: " + id));
+    public Utilisateur createUser(CreateUserRequest request) {
+        if (utilisateurRepository.existsByEmail(request.getEmail())) {
+            throw new ApiException("Un utilisateur avec cet email existe déjà");
+        }
 
-        produit.setNom(request.getNom());
-        produit.setDescription(request.getDescription());
-        produit.setPrix(request.getPrix());
-        produit.setStock(request.getStock());
-        produit.setImageUrl(request.getImageUrl());
+        Utilisateur utilisateur = Utilisateur.builder()
+                .email(request.getEmail())
+                .motDePasse(passwordEncoder.encode(request.getMotDePasse()))
+                .nom(request.getNom())
+                .prenom(request.getPrenom())
+                .role(request.getRole())
+                .actif(true)
+                .build();
 
-        produit = produitRepository.save(produit);
-        return convertToResponse(produit);
+        return utilisateurRepository.save(utilisateur);
     }
 
     @Transactional
-    public void supprimerProduit(String id) {
-        log.info("Suppression du produit: {}", id);
-        Produit produit = produitRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Produit non trouvé avec l'ID: " + id));
+    public Utilisateur updateUser(String id, UpdateUserRequest request) {
+        Utilisateur utilisateur = getUserById(id);
 
-        produit.setActif(false);
-        produitRepository.save(produit);
+        if (request.getEmail() != null) {
+            utilisateur.setEmail(request.getEmail());
+        }
+        if (request.getNom() != null) {
+            utilisateur.setNom(request.getNom());
+        }
+        if (request.getPrenom() != null) {
+            utilisateur.setPrenom(request.getPrenom());
+        }
+        if (request.getRole() != null) {
+            utilisateur.setRole(request.getRole());
+        }
+
+        return utilisateurRepository.save(utilisateur);
     }
 
-    private ProduitResponse convertToResponse(Produit produit) {
-        return ProduitResponse.builder()
-            .id(produit.getId())
-            .nom(produit.getNom())
-            .description(produit.getDescription())
-            .prix(produit.getPrix())
-            .stock(produit.getStock())
-            .imageUrl(produit.getImageUrl())
-            .actif(produit.getActif())
-            .createdAt(produit.getCreatedAt())
-            .updatedAt(produit.getUpdatedAt())
-            .build();
+    @Transactional
+    public void deleteUser(String id) {
+        if (!utilisateurRepository.existsById(id)) {
+            throw new ApiException("Utilisateur non trouvé");
+        }
+        utilisateurRepository.deleteById(id);
     }
 }

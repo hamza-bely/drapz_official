@@ -9,7 +9,15 @@
  */
 
 import { apiClient } from '../api-client';
-import { AuthResponse } from '@/types/api';
+import { AuthResponse, UserResponse } from '@/types/api';
+
+type UserData = {
+    email: string;
+    nom: string;
+    prenom: string;
+    role: string;
+    motDePasse?: string;
+};
 
 export const userService = {
     /**
@@ -63,5 +71,46 @@ export const userService = {
      */
     async confirmPasswordReset(token: string, nouveauMotDePasse: string): Promise<void> {
         await apiClient.post('auth/reset-confirm', { token, nouveauMotDePasse });
+    },
+
+    // --- Admin User Management ---
+
+    /**
+     * Récupérer tous les utilisateurs (Admin)
+     */
+    async getUsers(): Promise<UserResponse[]> {
+        const { data } = await apiClient.get('/admin/users');
+        return data;
+    },
+
+    /**
+     * Récupérer un utilisateur par son ID (Admin)
+     */
+    async getUserById(id: string): Promise<UserResponse> {
+        const { data } = await apiClient.get(`/admin/users/${id}`);
+        return data;
+    },
+
+    /**
+     * Créer un nouvel utilisateur (Admin)
+     */
+    async createUser(userData: UserData): Promise<UserResponse> {
+        const { data } = await apiClient.post('/admin/users', userData);
+        return data;
+    },
+
+    /**
+     * Mettre à jour un utilisateur (Admin)
+     */
+    async updateUser(id: string, userData: Partial<UserData>): Promise<UserResponse> {
+        const { data } = await apiClient.put(`/admin/users/${id}`, userData);
+        return data;
+    },
+
+    /**
+     * Supprimer un utilisateur (Admin)
+     */
+    async deleteUser(id: string): Promise<void> {
+        await apiClient.delete(`/admin/users/${id}`);
     },
 };

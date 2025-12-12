@@ -71,7 +71,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         } finally {
             handleSetUser(null);
             setIsAdmin(false);
-            // Rediriger vers la page d'accueil après déconnexion
+
             if (typeof window !== 'undefined') {
                 router.push('/');
             }

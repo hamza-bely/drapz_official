@@ -1,95 +1,115 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { useAuth } from '@/lib/auth-context';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { ProduitResponse } from '@/types/api';
+import { useToast } from '@/hooks/use-toast';
+import { userService } from '@/lib/services/userService';
 
-export default function AdminPage() {
-    const [products, setProducts] = useState<ProduitResponse[]>([]);
-    const { user } = useAuth();
+export default function LoginPage() {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [loading, setLoading] = useState(false);
     const router = useRouter();
+    const { setUser } = useAuth();
+    const { toast } = useToast();
 
-    useEffect(() => {
-        fetchProducts();
-    }, []);
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setLoading(true);
 
-    const fetchProducts = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/produits');
-            const data = await response.json();
-            setProducts(data.content);
-        } catch (error) {
-            console.error('Erreur lors de la récupération des produits:', error);
-        }
-    };
-
-    const handleDelete = async (id: string) => {
-        try {
-            await fetch(`http://localhost:8080/api/v1/produits/${id}`, {
-                method: 'DELETE',
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                },
+            const response = await userService.login(email, password);
+            setUser(response);
+            toast({
+                title: 'Connexion réussie',
+                description: 'Vous êtes maintenant connecté',
             });
-            fetchProducts();
+            router.push('/admindrapz/dashboard');
         } catch (error) {
-            console.error('Erreur lors de la suppression:', error);
+            toast({
+                title: 'Erreur',
+                description: 'Email ou mot de passe incorrect',
+                variant: 'destructive',
+            });
+        } finally {
+            setLoading(false);
         }
-    };
-
-    const handleEdit = (id: string) => {
-        router.push(`/admin/products/edit/${id}`);
     };
 
     return (
-        <div className="container py-8">
-            <div className="flex justify-between items-center mb-6">
-                <h1 className="text-2xl font-bold">Administration</h1>
-                <Button onClick={() => router.push('/admin/products/new')}>
-                    Ajouter un produit
-                </Button>
-            </div>
+        <div className="container mx-auto px-4 py-12 md:py-20 min-h-[calc(100vh-200px)] flex items-center justify-center">
+            <Card className="w-full max-w-md p-6 md:p-8">
+                <div className="space-y-6">
+                    <div className="text-center">
+                        <h1 className="text-2xl md:text-3xl font-bold mb-2">Connexion Admin</h1>
+                        <p className="text-sm text-slate-600">Connectez-vous à votre compte Drapz</p>
+                    </div>
 
-            <Card className="p-6">
-                <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead>Nom</TableHead>
-                            <TableHead>Prix</TableHead>
-                            <TableHead>Stock</TableHead>
-                            <TableHead>Actions</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {products.map((product) => (
-                            <TableRow key={product.id}>
-                                <TableCell>{product.nom}</TableCell>
-                                <TableCell>{product.prix}€</TableCell>
-                                <TableCell>{product.stock}</TableCell>
-                                <TableCell className="space-x-2">
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        onClick={() => handleEdit(product.id)}
-                                    >
-                                        Modifier
-                                    </Button>
-                                    <Button
-                                        variant="destructive"
-                                        size="sm"
-                                        onClick={() => handleDelete(product.id)}
-                                    >
-                                        Supprimer
-                                    </Button>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                        <div className="space-y-2">
+                            <label className="text-sm font-medium text-slate-700">Email</label>
+                            <Input
+                                type="email"
+                                placeholder="votre@email.com"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                                className="w-full"
+                            />
+                        </div>
+
+                        <div className="space-y-2">
+                            <label className="text-sm font-medium text-slate-700">Mot de passe</label>
+                            <Input
+                                type="password"
+                                placeholder="••••••••"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                                className="w-full"
+                            />
+                        </div>
+
+                        <Button
+                            type="submit"
+                            className="w-full h-10 md:h-11"
+                            disabled={loading}
+                        >
+                            {loading ? 'Connexion en cours...' : 'Se connecter'}
+                        </Button>
+                    </form>
+
+                    <div className="relative">
+                        <div className="absolute inset-0 flex items-center">
+                            <div className="w-full border-t" />
+                        </div>
+                        <div className="relative flex justify-center text-sm">
+                            <span className="px-2 bg-white text-slate-500">ou</span>
+                        </div>
+                    </div>
+
+                    <Link href="/auth/register">
+                        <Button
+                            type="button"
+                            variant="outline"
+                            className="w-full h-10 md:h-11"
+                        >
+                            Créer un compte
+                        </Button>
+                    </Link>
+
+                    <p className="text-center text-sm text-slate-600">
+                        Pas encore de compte ?{' '}
+                        <Link href="/auth/register" className="text-blue-600 font-semibold hover:underline">
+                            S&apos;inscrire
+                        </Link>
+                    </p>
+                </div>
             </Card>
         </div>
     );
