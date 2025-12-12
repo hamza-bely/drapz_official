@@ -45,30 +45,4 @@ public class ProduitController {
     public ResponseEntity<ProduitResponse> obtenirProduitParPays(@PathVariable String paysCode) {
         return ResponseEntity.ok(produitService.obtenirProduitParPaysCode(paysCode));
     }
-
-    @PostMapping
-    @SecurityRequirement(name = "bearer-jwt")
-    @Operation(summary = "Créer un nouveau produit (ADMIN uniquement)")
-    public ResponseEntity<ProduitResponse> creerProduit(@Valid @RequestBody ProduitRequest request) {
-        ProduitResponse response = adminService.creerProduit(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
-    }
-
-    @PutMapping("/{id}")
-    @SecurityRequirement(name = "bearer-jwt")
-    @Operation(summary = "Mettre à jour un produit (ADMIN uniquement)")
-    public ResponseEntity<ProduitResponse> mettreAJourProduit(
-            @PathVariable String id,
-            @Valid @RequestBody ProduitRequest request) {
-        ProduitResponse response = adminService.mettreAJourProduit(id, request);
-        return ResponseEntity.ok(response);
-    }
-
-    @DeleteMapping("/{id}")
-    @SecurityRequirement(name = "bearer-jwt")
-    @Operation(summary = "Supprimer un produit (ADMIN uniquement)")
-    public ResponseEntity<Void> supprimerProduit(@PathVariable String id) {
-        adminService.supprimerProduit(id);
-        return ResponseEntity.noContent().build();
-    }
 }

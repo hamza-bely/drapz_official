@@ -28,6 +28,11 @@ export interface CommandeResponse {
     montantTotal: number;
     createdAt: string;
     lignes: LigneCommandeResponse[];
+    utilisateur: {
+        nom: string;
+        prenom: string;
+        email: string;
+    };
 }
 
 export interface LigneCommandeResponse {

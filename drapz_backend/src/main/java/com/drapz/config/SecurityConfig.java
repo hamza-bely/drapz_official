@@ -58,9 +58,6 @@ public class SecurityConfig {
                         // Produits - publics en lecture
                         .requestMatchers(HttpMethod.GET, "/api/produits").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/produits/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/produits/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/produits/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/produits/**").hasRole("ADMIN")
 
                         // Pays - publics en lecture
                         .requestMatchers(HttpMethod.GET, "/api/pays").permitAll()

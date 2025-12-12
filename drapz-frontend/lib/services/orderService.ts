@@ -1,34 +1,38 @@
+/**
+ * Service des Commandes - Frontend
+ * 
+ * Gère:
+ * - Récupération des commandes pour l'admin
+ * - Mise à jour du statut des commandes
+ */
 
 import { apiClient } from '../api-client';
-import { CommandeResponse, CreerSessionResponse } from '@/types/api';
+import { CommandeResponse } from '@/types/api';
 
 export const orderService = {
     /**
-     * Créer une session de paiement Stripe
+     * Récupérer toutes les commandes (Admin)
      */
-    async createPaymentSession(articles: Array<{
-        produitId: string;
-        quantite: number;
-    }>): Promise<CreerSessionResponse> {
-        const { data } = await apiClient.post('/paiement/creer-session', {
-            articles,
-        });
+    async getOrders(): Promise<CommandeResponse[]> {
+        const { data } = await apiClient.get('/admin/commandes');
         return data;
     },
 
     /**
-     * Récupérer l'historique des commandes de l'utilisateur
-     */
-    async getUserOrders(page: number = 0, size: number = 10): Promise<any> {
-        const { data } = await apiClient.get(`/commandes?page=${page}&size=${size}`);
-        return data;
-    },
-
-    /**
-     * Récupérer les détails d'une commande
+     * Récupérer une commande par son ID (Admin)
      */
     async getOrderById(id: string): Promise<CommandeResponse> {
-        const { data } = await apiClient.get(`/commandes/${id}`);
+        const { data } = await apiClient.get(`/admin/commandes/${id}`);
+        return data;
+    },
+
+    /**
+     * Mettre à jour le statut d'une commande (Admin)
+     */
+    async updateOrderStatus(id: string, status: string): Promise<CommandeResponse> {
+        const { data } = await apiClient.put(`/admin/commandes/${id}/status`, status, {
+            headers: { 'Content-Type': 'text/plain' }
+        });
         return data;
     },
 };

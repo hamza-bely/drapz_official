@@ -21,6 +21,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+import { Spinner } from "@/components/ui/spinner";
+
 export default function UserManagementPage() {
   const [users, setUsers] = useState<UserResponse[]>([]);
   const [loading, setLoading] = useState(true);
@@ -58,7 +60,7 @@ export default function UserManagementPage() {
   };
 
   if (loading) {
-    return <p>Chargement des utilisateurs...</p>;
+    return <Spinner />;
   }
 
   if (error) {

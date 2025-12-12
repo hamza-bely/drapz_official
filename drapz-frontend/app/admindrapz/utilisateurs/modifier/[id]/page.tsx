@@ -7,6 +7,8 @@ import { userService } from "@/lib/services/userService";
 import { UserResponse } from "@/types/api";
 import { SubmitHandler } from "react-hook-form";
 
+import { Spinner } from "@/components/ui/spinner";
+
 export default function EditUserPage() {
   const router = useRouter();
   const params = useParams();
@@ -52,7 +54,7 @@ export default function EditUserPage() {
   };
 
   if (loading) {
-    return <p>Chargement de l'utilisateur...</p>;
+    return <Spinner />;
   }
 
   if (error) {

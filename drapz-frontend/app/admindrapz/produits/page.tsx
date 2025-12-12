@@ -22,6 +22,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+import { Spinner } from "@/components/ui/spinner";
+
 export default function ProductManagementPage() {
   const [products, setProducts] = useState<ProduitResponse[]>([]);
   const [loading, setLoading] = useState(true);
@@ -59,7 +61,7 @@ export default function ProductManagementPage() {
   };
 
   if (loading) {
-    return <p>Chargement des produits...</p>;
+    return <Spinner />;
   }
 
   if (error) {

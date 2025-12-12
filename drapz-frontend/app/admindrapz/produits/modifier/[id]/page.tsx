@@ -7,6 +7,8 @@ import { productService } from "@/lib/services/productService";
 import { ProduitResponse } from "@/types/api";
 import { SubmitHandler } from "react-hook-form";
 
+import { Spinner } from "@/components/ui/spinner";
+
 type ProductFormValues = {
   nom: string;
   description: string;
@@ -57,7 +59,7 @@ export default function EditProductPage() {
   };
 
   if (loading) {
-    return <p>Chargement du produit...</p>;
+    return <Spinner />;
   }
 
   if (error) {

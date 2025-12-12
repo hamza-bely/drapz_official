@@ -47,7 +47,7 @@ export const productService = {
      * Créer un nouveau produit
      */
     async createProduct(productData: ProductData): Promise<ProduitResponse> {
-        const { data } = await apiClient.post('/produits', productData);
+        const { data } = await apiClient.post('/admin/produits', productData);
         return data;
     },
 
@@ -55,7 +55,7 @@ export const productService = {
      * Mettre à jour un produit existant
      */
     async updateProduct(id: string, productData: ProductData): Promise<ProduitResponse> {
-        const { data } = await apiClient.put(`/produits/${id}`, productData);
+        const { data } = await apiClient.put(`/admin/produits/${id}`, productData);
         return data;
     },
 
@@ -63,6 +63,6 @@ export const productService = {
      * Supprimer un produit
      */
     async deleteProduct(id: string): Promise<void> {
-        await apiClient.delete(`/produits/${id}`);
+        await apiClient.delete(`/admin/produits/${id}`);
     },
 };
