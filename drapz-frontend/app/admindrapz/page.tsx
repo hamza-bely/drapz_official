@@ -19,7 +19,7 @@ export default function AdminPage() {
 
     const fetchProducts = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/v1/produits');
+            const response = await fetch('http://localhost:8080/api/produits');
             const data = await response.json();
             setProducts(data.content);
         } catch (error) {

@@ -65,6 +65,7 @@ export interface AuthResponse {
     email: string;
     nom: string;
     prenom: string;
+    role: string;
 }
 
 export interface InscriptionRequest {

@@ -52,6 +52,7 @@ public class UserService {
             .email(utilisateur.getEmail())
             .nom(utilisateur.getNom())
             .prenom(utilisateur.getPrenom())
+            .role(utilisateur.getRole().name())
             .build();
     }
 
@@ -74,6 +75,7 @@ public class UserService {
             .email(utilisateur.getEmail())
             .nom(utilisateur.getNom())
             .prenom(utilisateur.getPrenom())
+            .role(utilisateur.getRole().name())
             .build();
     }
 
@@ -87,6 +89,7 @@ public class UserService {
             .email(utilisateur.getEmail())
             .nom(utilisateur.getNom())
             .prenom(utilisateur.getPrenom())
+            .role(utilisateur.getRole().name())
             .build();
     }
 }

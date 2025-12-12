@@ -42,7 +42,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 const userData = await userService.getCurrentUser();
                 setUser(userData);
                 setIsAuthenticated(true);
-                setIsAdmin(false);
+                setIsAdmin(userData.role === 'ADMIN');
             } catch (error: any) {
                 // Utilisateur non authentifié - pas d'appel API fait
                 console.log('User not authenticated, navigating without login');
@@ -60,6 +60,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const handleSetUser = (newUser: AuthResponse | null) => {
         setUser(newUser);
         setIsAuthenticated(newUser !== null);
+        setIsAdmin(newUser?.role === 'ADMIN');
     };
 
     const logout = async () => {

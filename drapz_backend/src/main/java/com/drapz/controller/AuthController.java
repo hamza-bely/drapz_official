@@ -54,6 +54,7 @@ public class AuthController {
                 .email(authResponse.getEmail())
                 .nom(authResponse.getNom())
                 .prenom(authResponse.getPrenom())
+                    .role(authResponse.getRole())
                 .build()
         );
     }

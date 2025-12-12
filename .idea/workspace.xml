@@ -6,13 +6,21 @@
   <component name="ChangeListManager">
     <list default="true" id="cbe99a05-521d-4be7-9bb5-9a4adf915788" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/drapz-backend" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/drapz-frontend/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/drapz-frontend/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/drapz-frontend/app/admin/page.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/drapz-frontend/lib/auth-context.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/drapz-frontend/lib/auth-context.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/drapz-frontend/types/api.ts" beforeDir="false" afterPath="$PROJECT_DIR$/drapz-frontend/types/api.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/drapz_backend/src/main/java/com/drapz/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/drapz_backend/src/main/java/com/drapz/controller/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/drapz_backend/src/main/java/com/drapz/dto/AuthResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/drapz_backend/src/main/java/com/drapz/dto/AuthResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/drapz_backend/src/main/java/com/drapz/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/drapz_backend/src/main/java/com/drapz/service/UserService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings">
+    <execution />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -33,6 +41,7 @@
   <component name="KubernetesApiProvider">{
   &quot;isMigrated&quot;: true
 }</component>
+  <component name="PhpWorkspaceProjectConfiguration" interpreter_name="C:\wamp64\bin\php\php5.6.40\php.exe" />
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
 }</component>
@@ -41,30 +50,33 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/hamza/OneDrive/Desktop/hamza/projet_perso/drapz&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\IntelliJ IDEA 2025.1\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "com.codeium.enabled": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/hamza.belyahiaoui.FRLT284411/Bureau/hamza/projet_perso/drapz_official/drapz-frontend",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "ts.external.directory.path": "C:\\Users\\hamza.belyahiaoui.FRLT284411\\Bureau\\hamza\\projet_perso\\drapz_official\\drapz-frontend\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.23774.435" />
-        <option value="bundled-js-predefined-d6986cc7102b-f27c65a3e318-JavaScript-IU-251.23774.435" />
+        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.15989.150" />
+        <option value="bundled-js-predefined-1d06a55b98c1-91d5c284f522-JavaScript-IU-241.15989.150" />
       </set>
     </attachedChunks>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="cbe99a05-521d-4be7-9bb5-9a4adf915788" name="Changes" comment="" />
@@ -76,6 +88,7 @@
       <workItem from="1763405246269" duration="1728000" />
       <workItem from="1763408313950" duration="291000" />
       <workItem from="1763408634512" duration="293000" />
+      <workItem from="1765554573004" duration="3352000" />
     </task>
     <servers />
   </component>
