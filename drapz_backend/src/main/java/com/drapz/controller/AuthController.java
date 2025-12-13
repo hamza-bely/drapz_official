@@ -1,8 +1,6 @@
 package com.drapz.controller;
 
-import com.drapz.dto.AuthRequest;
-import com.drapz.dto.AuthResponse;
-import com.drapz.dto.InscriptionRequest;
+import com.drapz.dto.*;
 import com.drapz.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -12,11 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -33,7 +29,7 @@ public class AuthController {
     public ResponseEntity<AuthResponse> inscription(@Valid @RequestBody InscriptionRequest request, HttpServletResponse response) {
         AuthResponse authResponse = userService.inscription(request);
         setTokenCookie(response, authResponse.getToken());
-        
+
         return ResponseEntity.status(HttpStatus.CREATED).body(
             AuthResponse.builder()
                 .email(authResponse.getEmail())
@@ -48,7 +44,7 @@ public class AuthController {
     public ResponseEntity<AuthResponse> connexion(@Valid @RequestBody AuthRequest request, HttpServletResponse response) {
         AuthResponse authResponse = userService.connexion(request);
         setTokenCookie(response, authResponse.getToken());
-        
+
         return ResponseEntity.ok(
             AuthResponse.builder()
                 .email(authResponse.getEmail())
@@ -59,13 +55,27 @@ public class AuthController {
         );
     }
 
+    @PostMapping("/forgot-password")
+    @Operation(summary = "Demande de réinitialisation de mot de passe")
+    public ResponseEntity<Map<String, String>> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request) {
+        userService.forgotPassword(request.getEmail());
+        return ResponseEntity.ok(Map.of("message", "Si un compte avec cet email existe, un lien de réinitialisation a été envoyé."));
+    }
+
+    @PostMapping("/reset-password")
+    @Operation(summary = "Réinitialiser le mot de passe avec un token")
+    public ResponseEntity<Map<String, String>> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
+        userService.resetPassword(request.getToken(), request.getNewPassword());
+        return ResponseEntity.ok(Map.of("message", "Votre mot de passe a été réinitialisé avec succès."));
+    }
+
     @GetMapping("/me")
     @Operation(summary = "Récupérer les infos de l'utilisateur connecté")
     public ResponseEntity<AuthResponse> getCurrentUser(Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        
+
         AuthResponse response = userService.getCurrentUser(authentication.getName());
         return ResponseEntity.ok(response);
     }

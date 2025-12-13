@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { userService } from '@/lib/services/userService';
+import { authService } from '@/lib/services';
 
 export default function LoginPage() {
     const [email, setEmail] = useState('');
@@ -23,7 +23,7 @@ export default function LoginPage() {
         setLoading(true);
 
         try {
-            const response = await userService.login(email, password);
+            const response = await authService.login({ email, motDePasse: password });
             setUser(response);
             toast({
                 title: 'Connexion réussie',

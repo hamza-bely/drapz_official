@@ -9,8 +9,4 @@ export const countryService = {
         return data;
     },
 
-    async getCountryByCode(code: string): Promise<PaysResponse> {
-        const { data } = await apiClient.get(`pays/${code}`);
-        return data;
-    },
 };

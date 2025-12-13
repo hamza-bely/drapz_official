@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { userService } from "@/lib/services/userService";
+import { authService } from "@/lib/services";
 import { useAuth } from "@/lib/auth-context";
 
 export default function AdminLoginPage() {
@@ -20,7 +20,7 @@ export default function AdminLoginPage() {
     setError("");
 
     try {
-      const authResponse = await userService.login(email, motDePasse);
+      const authResponse = await authService.login({ email, motDePasse });
       if (authResponse.role === "ADMIN") {
         setUser(authResponse);
         router.push("/admindrapz/dashboard");

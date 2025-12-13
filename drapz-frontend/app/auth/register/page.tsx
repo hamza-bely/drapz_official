@@ -3,12 +3,12 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { register } from '@/lib/auth';
 import { useAuth } from '@/lib/auth-context';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
+import { authService } from '@/lib/services';
 
 export default function RegisterPage() {
     const [formData, setFormData] = useState({
@@ -27,7 +27,7 @@ export default function RegisterPage() {
         setLoading(true);
 
         try {
-            const response = await register(formData);
+            const response = await authService.register(formData);
             setUser(response);
             toast({
                 title: 'Inscription réussie',
@@ -51,7 +51,7 @@ export default function RegisterPage() {
             [e.target.name]: e.target.value,
         }));
     };
-
+    
     return (
         <div className="container mx-auto px-4 py-12 md:py-20 min-h-[calc(100vh-200px)] flex items-center justify-center">
             <Card className="w-full max-w-md p-6 md:p-8">

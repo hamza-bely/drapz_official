@@ -4,7 +4,24 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cbe99a05-521d-4be7-9bb5-9a4adf915788" name="Changes" comment="" />
+    <list default="true" id="cbe99a05-521d-4be7-9bb5-9a4adf915788" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/drapz-frontend/app/admindrapz/login/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/drapz-frontend/app/admindrapz/login/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/drapz-frontend/app/admindrapz/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/drapz-frontend/app/admindrapz/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/drapz-frontend/app/auth/login/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/drapz-frontend/app/auth/login/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/drapz-frontend/app/auth/register/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/drapz-frontend/app/auth/register/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/drapz-frontend/lib/auth-context.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/drapz-frontend/lib/auth-context.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/drapz-frontend/lib/auth.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/drapz-frontend/lib/services/countryService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/drapz-frontend/lib/services/countryService.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/drapz-frontend/lib/services/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/drapz-frontend/lib/services/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/drapz-frontend/lib/services/userService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/drapz-frontend/lib/services/userService.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/drapz_backend/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/drapz_backend/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/drapz_backend/src/main/java/com/drapz/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/drapz_backend/src/main/java/com/drapz/controller/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/drapz_backend/src/main/java/com/drapz/entity/Utilisateur.java" beforeDir="false" afterPath="$PROJECT_DIR$/drapz_backend/src/main/java/com/drapz/entity/Utilisateur.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/drapz_backend/src/main/java/com/drapz/repository/UtilisateurRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/drapz_backend/src/main/java/com/drapz/repository/UtilisateurRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/drapz_backend/src/main/java/com/drapz/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/drapz_backend/src/main/java/com/drapz/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/drapz_backend/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/drapz_backend/src/main/resources/application.yml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -80,7 +97,7 @@
       <workItem from="1763408313950" duration="291000" />
       <workItem from="1763408634512" duration="293000" />
       <workItem from="1765554573004" duration="16594000" />
-      <workItem from="1765652130700" duration="3623000" />
+      <workItem from="1765652130700" duration="6285000" />
     </task>
     <servers />
   </component>

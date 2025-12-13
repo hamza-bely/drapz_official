@@ -3,7 +3,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { AuthResponse } from '@/types/api';
-import { userService } from './services/userService';
+import { authService } from './services';
 
 interface AuthContextType {
     user: AuthResponse | null;
@@ -39,7 +39,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             try {
                 // Essayer de récupérer le token du cookie
                 // Si pas de token, getUserUser retournera une erreur 401
-                const userData = await userService.getCurrentUser();
+                const userData = await authService.getCurrentUser();
                 setUser(userData);
                 setIsAuthenticated(true);
                 setIsAdmin(userData.role === 'ADMIN');
@@ -65,7 +65,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const logout = async () => {
         try {
-            await userService.logout(); // Appel au backend pour supprimer le cookie
+            await authService.logout(); // Appel au backend pour supprimer le cookie
         } catch (error) {
             console.error('❌ Erreur lors de la déconnexion:', error);
         } finally {

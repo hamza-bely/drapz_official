@@ -8,6 +8,7 @@ import com.drapz.entity.Utilisateur.Role;
 import com.drapz.exception.ApiException;
 import com.drapz.repository.UtilisateurRepository;
 import com.drapz.security.JwtTokenProvider;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,7 +16,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +28,38 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
+    private final EmailService emailService;
+
+    @Transactional
+    public void forgotPassword(String email) {
+        log.info("Demande de réinitialisation de mot de passe pour: {}", email);
+
+        utilisateurRepository.findByEmail(email).ifPresent(utilisateur -> {
+            String token = UUID.randomUUID().toString();
+            utilisateur.setResetPasswordToken(token);
+            utilisateur.setResetPasswordTokenExpiry(LocalDateTime.now().plusMinutes(15));
+            utilisateurRepository.save(utilisateur);
+            emailService.sendPasswordResetEmail(utilisateur.getEmail(), token);
+        });
+        // No error is thrown if the user is not found to prevent user enumeration
+    }
+
+    @Transactional
+    public void resetPassword(String token, String newPassword) {
+        log.info("Réinitialisation du mot de passe avec le token: {}", token);
+
+        Utilisateur utilisateur = utilisateurRepository.findByResetPasswordToken(token)
+            .orElseThrow(() -> new ApiException("Token de réinitialisation invalide ou expiré"));
+
+        if (utilisateur.getResetPasswordTokenExpiry().isBefore(LocalDateTime.now())) {
+            throw new ApiException("Token de réinitialisation expiré");
+        }
+
+        utilisateur.setMotDePasse(passwordEncoder.encode(newPassword));
+        utilisateur.setResetPasswordToken(null);
+        utilisateur.setResetPasswordTokenExpiry(null);
+        utilisateurRepository.save(utilisateur);
+    }
 
     @Transactional
     public AuthResponse inscription(InscriptionRequest request) {
