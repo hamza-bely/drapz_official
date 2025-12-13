@@ -1,7 +1,7 @@
 "use client";
 
 import Link from 'next/link';
-import { ShoppingCart, Menu, X } from 'lucide-react';
+import { ShoppingCart, Menu, X, User, LogOut, LogIn, UserPlus } from 'lucide-react';
 import { useCart } from '@/lib/cart-context';
 import { useAuth } from '@/lib/auth-context';
 import { Button } from '@/components/ui/button';
@@ -52,8 +52,10 @@ export function UserHeader() {
           <div className="hidden md:flex items-center gap-2 lg:gap-4">
             {!loading && user ? (
               <>
-                <Link href="/profile" className="text-sm font-medium hover:text-blue-600 transition-colors">
-                  Profil
+                <Link href="/profile">
+                  <Button variant="ghost" size="sm">
+                    <User className="h-5 w-5" />
+                  </Button>
                 </Link>
                 <Link href="/panier">
                   <Button variant="ghost" size="sm" className="relative">
@@ -71,15 +73,17 @@ export function UserHeader() {
                   onClick={logout}
                   className="text-sm"
                 >
-                  Déconnexion
+                  <LogOut className="h-5 w-5" />
                 </Button>
               </>
             ) : !loading ? (
               <>
-                <Link href="/auth/login" className="text-sm font-medium hover:text-blue-600 transition-colors">
+                <Link href="/auth/login" className="text-sm font-medium hover:text-blue-600 transition-colors flex items-center gap-1">
+                  <LogIn className="h-4 w-4" />
                   Login
                 </Link>
-                <Link href="/auth/register" className="text-sm font-medium hover:text-blue-600 transition-colors">
+                <Link href="/auth/register" className="text-sm font-medium hover:text-blue-600 transition-colors flex items-center gap-1">
+                  <UserPlus className="h-4 w-4" />
                   Register
                 </Link>
               </>
@@ -129,16 +133,18 @@ export function UserHeader() {
                   className="block px-4 py-2 text-sm font-medium hover:bg-slate-100 rounded transition-colors"
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  👤 Profil
+                  <User className="h-4 w-4 mr-2 inline-block" />
+                  Profil
                 </Link>
                 <button
                   onClick={() => {
                     logout();
                     setMobileMenuOpen(false);
                   }}
-                  className="w-full text-left px-4 py-2 text-sm font-medium hover:bg-slate-100 rounded transition-colors text-red-600"
+                  className="w-full text-left px-4 py-2 text-sm font-medium hover:bg-slate-100 rounded transition-colors text-red-600 flex items-center"
                 >
-                  🚪 Déconnexion
+                  <LogOut className="h-4 w-4 mr-2 inline-block" />
+                  Déconnexion
                 </button>
               </>
             ) : !loading ? (
@@ -148,6 +154,7 @@ export function UserHeader() {
                   className="block px-4 py-2 text-sm font-medium hover:bg-slate-100 rounded transition-colors"
                   onClick={() => setMobileMenuOpen(false)}
                 >
+                  <LogIn className="h-4 w-4 mr-2 inline-block" />
                   Login
                 </Link>
                 <Link
@@ -155,6 +162,7 @@ export function UserHeader() {
                   className="block px-4 py-2 text-sm font-medium hover:bg-slate-100 rounded transition-colors"
                   onClick={() => setMobileMenuOpen(false)}
                 >
+                  <UserPlus className="h-4 w-4 mr-2 inline-block" />
                   Register
                 </Link>
               </>

@@ -5,16 +5,8 @@ import { useAuth } from '@/lib/auth-context';
 import { orderService } from '@/lib/services';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import Link from 'next/link';
-import { useToast } from '@/hooks/use-toast';
-
-interface Adresse {
-  ligne1: string;
-  ville: string;
-  codePostal: string;
-  pays: string;
-}
+import { Hand, Package, User } from 'lucide-react';
 
 export default function ProfilePage() {
   const { user } = useAuth();
@@ -29,7 +21,6 @@ export default function ProfilePage() {
       setLoadingOrders(true);
       try {
         const resp = await orderService.getUserOrders(0, 20);
-        // API may return paginated content or an array
         const data = resp;
         setOrders(data.content ?? data);
       } catch (err) {
@@ -45,7 +36,7 @@ export default function ProfilePage() {
   if (!user) {
     return (
       <div className="container mx-auto px-4 py-12 md:py-20 min-h-[calc(100vh-200px)] flex items-center justify-center">
-        <Card className="w-full max-w-md p-6 text-center">
+        <Card className="w-full max-w-md p-6 text-center animate-in fade-in zoom-in-95">
           <h2 className="text-xl font-semibold mb-2">Vous devez vous connecter</h2>
           <p className="mb-4 text-sm text-slate-600">
             Connectez-vous pour voir votre profil et vos commandes.
@@ -59,24 +50,26 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 md:py-12">
+    <div className="container mx-auto px-4 py-8 md:py-12 animate-in fade-in">
       {/* Header */}
       <div className="mb-8 md:mb-12">
-        <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-2">Mon Profil</h1>
-        <p className="text-slate-600 text-sm md:text-base">
-          Bienvenue {user.prenom} {user.nom} 👋
+        <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-2 flex items-center gap-2">
+          Mon Profil
+        </h1>
+        <p className="text-slate-600 text-sm md:text-base flex items-center gap-2">
+          Bienvenue {user.prenom} {user.nom} <Hand className="inline-block h-5 w-5 text-yellow-500" />
         </p>
       </div>
 
       {/* Profile Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-8 md:mb-12">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 mb-8 md:mb-12">
         {/* Personal Information */}
-        <Card>
+        <Card className="col-span-1 lg:col-span-3 animate-in fade-in slide-in-from-bottom-4 duration-500">
           <CardContent className="p-4 md:p-6">
             <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-              👤 Informations personnelles
+              <User className="h-5 w-5 text-blue-600" /> Informations personnelles
             </h2>
-            <div className="space-y-2 text-sm md:text-base">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm md:text-base">
               <div>
                 <span className="font-medium text-slate-600">Prénom:</span>
                 <p className="text-slate-800">{user.prenom}</p>
@@ -90,44 +83,15 @@ export default function ProfilePage() {
                 <p className="text-slate-800 break-all">{user.email}</p>
               </div>
             </div>
-            {/* <div className="mt-4">
-              <Link href="/auth/register">
-                <Button variant="outline" size="sm" className="w-full">
-                  Modifier mes informations
-                </Button>
-              </Link>
-            </div> */}
-          </CardContent>
-        </Card>
-
-        {/* Quick Links */}
-        <Card className="sm:col-span-2 lg:col-span-1">
-          <CardContent className="p-4 md:p-6">
-            <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-              🛒 Actions rapides
-            </h2>
-            <p className="text-xs md:text-sm text-slate-600 mb-4">
-              Accédez rapidement à votre panier et vos commandes.
-            </p>
-            <div className="flex flex-col gap-2">
-              <Link href="/panier">
-                <Button variant="default" size="sm" className="w-full">
-                  Voir mon panier
-                </Button>
-              </Link>
-              <Link href="/catalogue">
-                <Button variant="outline" size="sm" className="w-full">
-                  Continuer mes achats
-                </Button>
-              </Link>
-            </div>
           </CardContent>
         </Card>
       </div>
 
       {/* Orders Section */}
-      <section>
-        <h2 className="text-xl md:text-2xl font-semibold mb-4 md:mb-6">📦 Mes commandes</h2>
+      <section className="animate-in fade-in slide-in-from-bottom-4 duration-500 delay-150">
+        <h2 className="text-xl md:text-2xl font-semibold mb-4 md:mb-6 flex items-center gap-2">
+          <Package className="h-6 w-6 text-blue-600" /> Mes commandes
+        </h2>
         {loadingOrders ? (
           <Card>
             <CardContent className="p-6">
@@ -136,17 +100,21 @@ export default function ProfilePage() {
           </Card>
         ) : orders.length === 0 ? (
           <Card>
-            <CardContent className="p-6">
-              <p className="text-slate-600">Vous n'avez encore passé aucune commande.</p>
+            <CardContent className="p-6 text-center">
+              <p className="text-slate-600 mb-4">Vous n'avez encore passé aucune commande.</p>
               <Link href="/catalogue">
-                <Button className="mt-4">Commencer vos achats</Button>
+                <Button>Commencer vos achats</Button>
               </Link>
             </CardContent>
           </Card>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-            {orders.map((commande: any) => (
-              <Card key={commande.id} className="overflow-hidden">
+            {orders.map((commande: any, index: number) => (
+              <Card
+                key={commande.id}
+                className="overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-500"
+                style={{ animationDelay: `${150 + index * 100}ms` }}
+              >
                 <CardContent className="p-4 md:p-6">
                   <div className="space-y-3">
                     <div className="flex items-start justify-between">
@@ -158,7 +126,13 @@ export default function ProfilePage() {
                           {new Date(commande.createdAt).toLocaleDateString('fr-FR')}
                         </div>
                       </div>
-                      <span className="text-xs md:text-sm font-semibold px-3 py-1 rounded-full bg-blue-100 text-blue-700">
+                      <span
+                        className={`text-xs md:text-sm font-semibold px-3 py-1 rounded-full ${
+                          commande.statut === 'Payée'
+                            ? 'bg-green-100 text-green-700'
+                            : 'bg-blue-100 text-blue-700'
+                        }`}
+                      >
                         {commande.statut}
                       </span>
                     </div>

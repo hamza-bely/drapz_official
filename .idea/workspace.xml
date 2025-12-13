@@ -6,23 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="cbe99a05-521d-4be7-9bb5-9a4adf915788" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/drapz-frontend/app/admindrapz/commandes/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/drapz-frontend/app/admindrapz/commandes/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/drapz-frontend/app/admindrapz/dashboard/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/drapz-frontend/app/admindrapz/dashboard/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/drapz-frontend/app/admindrapz/produits/modifier/[id]/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/drapz-frontend/app/admindrapz/produits/modifier/[id]/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/drapz-frontend/app/admindrapz/produits/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/drapz-frontend/app/admindrapz/produits/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/drapz-frontend/app/admindrapz/utilisateurs/modifier/[id]/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/drapz-frontend/app/admindrapz/utilisateurs/modifier/[id]/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/drapz-frontend/app/admindrapz/utilisateurs/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/drapz-frontend/app/admindrapz/utilisateurs/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/drapz-frontend/components/admin-header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/drapz-frontend/components/admin-header.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/drapz-frontend/lib/services/orderService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/drapz-frontend/lib/services/orderService.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/drapz-frontend/lib/services/productService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/drapz-frontend/lib/services/productService.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/drapz-frontend/types/api.ts" beforeDir="false" afterPath="$PROJECT_DIR$/drapz-frontend/types/api.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/drapz_backend/src/main/java/com/drapz/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/drapz_backend/src/main/java/com/drapz/config/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/drapz_backend/src/main/java/com/drapz/controller/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/drapz_backend/src/main/java/com/drapz/controller/AdminController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/drapz_backend/src/main/java/com/drapz/controller/ProduitController.java" beforeDir="false" afterPath="$PROJECT_DIR$/drapz_backend/src/main/java/com/drapz/controller/ProduitController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/drapz_backend/src/main/java/com/drapz/dto/CommandeResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/drapz_backend/src/main/java/com/drapz/dto/CommandeResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/drapz_backend/src/main/java/com/drapz/dto/LigneCommandeResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/drapz_backend/src/main/java/com/drapz/dto/LigneCommandeResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/drapz_backend/src/main/java/com/drapz/repository/CommandeRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/drapz_backend/src/main/java/com/drapz/repository/CommandeRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/drapz_backend/src/main/java/com/drapz/service/AdminService.java" beforeDir="false" afterPath="$PROJECT_DIR$/drapz_backend/src/main/java/com/drapz/service/AdminService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/drapz-frontend/app/profile/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/drapz-frontend/app/profile/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/drapz-frontend/components/user-header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/drapz-frontend/components/user-header.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,24 +45,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "com.codeium.enabled": "true",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/hamza.belyahiaoui.FRLT284411/Bureau/hamza/projet_perso/drapz_official/drapz-frontend",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "ts.external.directory.path": "C:\\Users\\hamza.belyahiaoui.FRLT284411\\Bureau\\hamza\\projet_perso\\drapz_official\\drapz-frontend\\node_modules\\typescript\\lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;com.codeium.enabled&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/hamza.belyahiaoui.FRLT284411/Bureau/hamza/projet_perso/drapz_official/drapz-frontend&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\hamza.belyahiaoui.FRLT284411\\Bureau\\hamza\\projet_perso\\drapz_official\\drapz-frontend\\node_modules\\typescript\\lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -98,7 +83,8 @@
       <workItem from="1763405246269" duration="1728000" />
       <workItem from="1763408313950" duration="291000" />
       <workItem from="1763408634512" duration="293000" />
-      <workItem from="1765554573004" duration="15566000" />
+      <workItem from="1765554573004" duration="16594000" />
+      <workItem from="1765652130700" duration="1561000" />
     </task>
     <servers />
   </component>
