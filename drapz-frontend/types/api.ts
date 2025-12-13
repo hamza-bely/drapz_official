@@ -1,3 +1,12 @@
+export interface PaysResponse {
+    id: string;
+    nom: string;
+    code: string;
+    latitude: number;
+    longitude: number;
+    flagUrl: string;
+}
+
 export interface ProduitResponse {
     id: string;
     nom: string;
@@ -8,6 +17,7 @@ export interface ProduitResponse {
     actif: boolean;
     createdAt: string;
     updatedAt: string;
+    pays: PaysResponse;
 }
 
 export interface PageProduitResponse {
