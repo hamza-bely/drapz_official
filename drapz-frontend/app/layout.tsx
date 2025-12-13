@@ -4,6 +4,8 @@ import './globals.css';
 import { Inter } from 'next/font/google';
 import { AuthProvider } from '@/lib/auth-context';
 import { AppContent } from '@/components/app-content';
+import { usePathname } from 'next/navigation';
+
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -12,6 +14,9 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const pathname = usePathname();
+  const hideFooter = pathname === '/nationalite';
+  
   return (
     <html lang="fr" className="scroll-smooth">
       <head>
@@ -22,7 +27,7 @@ export default function RootLayout({
       </head>
       <body className={`${inter.className} antialiased bg-white text-foreground`}>
         <AuthProvider>
-          <AppContent>{children}</AppContent>
+          <AppContent hideFooter={hideFooter}>{children}</AppContent>
         </AuthProvider>
       </body>
     </html>

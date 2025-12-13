@@ -1,12 +1,10 @@
-"use client";
-
-import Link from 'next/link';
-import { ShoppingCart, Menu, X, User, LogOut, LogIn, UserPlus } from 'lucide-react';
+import { ShoppingCart, Menu, X, User, LogOut, LogIn, UserPlus, Globe, LayoutGrid } from 'lucide-react';
 import { useCart } from '@/lib/cart-context';
 import { useAuth } from '@/lib/auth-context';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import { useState } from 'react';
+import Link from 'next/link';
 
 export function UserHeader() {
   const { totalItems } = useCart();
@@ -18,8 +16,8 @@ export function UserHeader() {
   };
 
   const navLinks = [
-    { href: '/catalogue', label: 'Catalogue' },
-    { href: '/nationalite', label: 'Nationalités' },
+    { href: '/catalogue', label: 'Catalogue', icon: LayoutGrid },
+    { href: '/nationalite', label: 'Nationalités', icon: Globe },
   ];
 
   return (
@@ -38,12 +36,13 @@ export function UserHeader() {
           </Link>
 
           <nav className="hidden lg:flex items-center gap-6 flex-1 mx-8">
-            {navLinks.map(({ href, label }) => (
+            {navLinks.map(({ href, label, icon: Icon }) => (
               <Link
                 key={href}
                 href={href}
-                className="text-sm font-medium hover:text-blue-600 transition-colors whitespace-nowrap"
+                className="text-sm font-medium hover:text-blue-600 transition-colors whitespace-nowrap flex items-center gap-1"
               >
+                {Icon && <Icon className="h-4 w-4" />}
                 {label}
               </Link>
             ))}
@@ -113,13 +112,14 @@ export function UserHeader() {
 
         {mobileMenuOpen && (
           <nav className="md:hidden border-t pb-4 space-y-1 animate-in fade-in slide-in-from-top-2">
-            {navLinks.map(({ href, label }) => (
+            {navLinks.map(({ href, label, icon: Icon }) => (
               <Link
                 key={href}
                 href={href}
-                className="block px-4 py-2 text-sm font-medium hover:bg-slate-100 rounded transition-colors"
+                className="block px-4 py-2 text-sm font-medium hover:bg-slate-100 rounded transition-colors flex items-center gap-2"
                 onClick={() => setMobileMenuOpen(false)}
               >
+                {Icon && <Icon className="h-4 w-4" />}
                 {label}
               </Link>
             ))}

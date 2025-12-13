@@ -25,13 +25,10 @@ const CesiumMap: React.FC<CesiumMapProps> = ({ countries, onCountryClick }) => {
   useEffect(() => {
     if (!mapContainerRef.current) return;
 
-    // Initialiser la carte
     const map = L.map(mapContainerRef.current, {
       center: [20, 0],
-      zoom: 3,
-      zoomControl: true,
-      dragging: true,
-    });
+      zoom: 3,     // Disable keyboard navigation                                                                                                                                                                       │
+  });
 
     mapRef.current = map;
 
@@ -108,7 +105,7 @@ const CesiumMap: React.FC<CesiumMapProps> = ({ countries, onCountryClick }) => {
       ref={mapContainerRef}
       style={{
         width: '100%',
-        height: '800px',
+        height: '750px',
         borderRadius: '0.5rem',
         boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
       }}

@@ -9,8 +9,10 @@ import { CartProvider } from '@/lib/cart-context';
 
 export function AppContent({
     children,
+    hideFooter = false,
 }: {
     children: React.ReactNode;
+    hideFooter?: boolean;
 }) {
     const { isAdmin } = useAuth();
 
@@ -21,7 +23,7 @@ export function AppContent({
                 <main className="flex-1 w-full">
                     {children}
                 </main>
-                <Footer />
+                {!hideFooter && <Footer />}
             </div>
             <Toaster />
         </CartProvider>
