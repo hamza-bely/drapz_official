@@ -47,7 +47,7 @@ COPY --from=build /app/public ./public
 # COPY --from=build /app/next.config.js ./next.config.js
 
 # Expose le port
-EXEXPOSE 4000
+EXPOSE 4000
 
 # Lancement Next.js
 # NEXT_TELEMETRY_DISABLED pour éviter les logs télémetrie en prod
