@@ -7,7 +7,7 @@
  */
 
 import { apiClient } from '../api-client';
-import { CommandeResponse } from '@/types/api';
+import {CommandeResponse, CreerSessionResponse, PageCommandeResponse} from '@/types/api';
 
 export const orderService = {
     /**
@@ -35,7 +35,16 @@ export const orderService = {
         });
         return data;
     },
-    createPaymentSession(articles: { produitId: string; quantite: number }[]) {
-        
+    async createPaymentSession(articles: { produitId: string; quantite: number }[]): Promise<CreerSessionResponse> {
+        const { data } = await apiClient.post('/paiement/creer-session', { articles });
+        return data;
+    },
+
+    /**
+     * Récupérer les commandes de l'utilisateur
+     */
+    async getUserOrders(page: number, size: number): Promise<PageCommandeResponse> {
+        const { data } = await apiClient.get('/commandes', { params: { page, size } });
+        return data;
     }
 };

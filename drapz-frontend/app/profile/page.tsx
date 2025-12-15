@@ -17,19 +17,17 @@ export default function ProfilePage() {
   useEffect(() => {
     if (!user) return;
 
-    const fetchOrders = async () => {
-      setLoadingOrders(true);
-      try {
-        const resp = await orderService.getUserOrders(0, 20);
-        const data = resp;
-        setOrders(data.content ?? data);
-      } catch (err) {
-        console.error('Failed to fetch orders', err);
-      } finally {
-        setLoadingOrders(false);
-      }
-    };
-
+            const fetchOrders = async () => {
+                setLoadingOrders(true);
+                try {
+                    const resp = await orderService.getUserOrders(0, 20);
+                    setOrders(resp.content);
+                } catch (err) {
+                    console.error('Failed to fetch orders', err);
+                } finally {
+                    setLoadingOrders(false);
+                }
+            };
     fetchOrders();
   }, [user]);
 
@@ -128,12 +126,22 @@ export default function ProfilePage() {
                       </div>
                       <span
                         className={`text-xs md:text-sm font-semibold px-3 py-1 rounded-full ${
-                          commande.statut === 'Payée'
+                          commande.statut === 'CONFIRMEE'
                             ? 'bg-green-100 text-green-700'
+                            : commande.statut === 'ANNULEE' || commande.statut === 'REMBOURSEE'
+                            ? 'bg-red-100 text-red-700'
                             : 'bg-blue-100 text-blue-700'
                         }`}
                       >
-                        {commande.statut}
+                        {
+                          commande.statut === 'EN_ATTENTE' ? 'En attente' :
+                          commande.statut === 'CONFIRMEE' ? 'Confirmée' :
+                          commande.statut === 'EXPEDIEE' ? 'Expédiée' :
+                          commande.statut === 'LIVREE' ? 'Livrée' :
+                          commande.statut === 'ANNULEE' ? 'Annulée' :
+                          commande.statut === 'REMBOURSEE' ? 'Remboursée' :
+                          commande.statut
+                        }
                       </span>
                     </div>
 

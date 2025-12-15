@@ -35,6 +35,10 @@ export default function ProductPage() {
 
     async function fetchProduct() {
       try {
+        if (!id) {
+          setLoading(false);
+          return;
+        }
         const resp = await productService.getProductById(id);
         setProduct(resp);
       } catch (err) {

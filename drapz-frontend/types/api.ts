@@ -80,7 +80,7 @@ export interface AuthResponse {
     email: string;
     nom: string;
     prenom: string;
-    role: string;
+    role: "ADMIN" | "USER" | undefined;
 }
 
 export interface PersonalizedFlag {
@@ -88,6 +88,18 @@ export interface PersonalizedFlag {
     name: string;
     description: string;
     imageUrl: string;
+}
+
+export interface PageCommandeResponse {
+    totalElements: number;
+    totalPages: number;
+    size: number;
+    content: CommandeResponse[];
+    number: number;
+    first: boolean;
+    last: boolean;
+    numberOfElements: number;
+    empty: boolean;
 }
 
 export interface InscriptionRequest {
@@ -102,5 +114,5 @@ export interface UserResponse {
     email: string;
     nom: string;
     prenom: string;
-    role: string;
+    role: "ADMIN" | "USER" | undefined;
 }

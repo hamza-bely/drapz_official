@@ -6,12 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="cbe99a05-521d-4be7-9bb5-9a4adf915788" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/drapz-frontend/components/user-header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/drapz-frontend/components/user-header.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/drapz-frontend/app/panier/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/drapz-frontend/app/panier/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/drapz-frontend/app/produit/[slug]/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/drapz-frontend/app/produit/[slug]/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/drapz-frontend/app/profile/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/drapz-frontend/app/profile/page.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/drapz-frontend/lib/services/orderService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/drapz-frontend/lib/services/orderService.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/drapz-frontend/types/api.ts" beforeDir="false" afterPath="$PROJECT_DIR$/drapz-frontend/types/api.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/drapz_backend/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/drapz_backend/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/drapz_backend/src/main/resources/data.sql" beforeDir="false" afterPath="$PROJECT_DIR$/drapz_backend/src/main/resources/data.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/drapz_backend/src/main/resources/test-data.sql" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -89,7 +88,7 @@
       <workItem from="1763408634512" duration="293000" />
       <workItem from="1765554573004" duration="16594000" />
       <workItem from="1765652130700" duration="9037000" />
-      <workItem from="1765739196126" duration="5635000" />
+      <workItem from="1765739196126" duration="7024000" />
     </task>
     <servers />
   </component>
