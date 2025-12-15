@@ -13,12 +13,12 @@ interface Country {
   flagUrl: string;
 }
 
-interface CesiumMapProps {
+interface LeafletMapProps {
   countries: Country[];
   onCountryClick: (country: Country) => void;
 }
 
-const CesiumMap: React.FC<CesiumMapProps> = ({ countries, onCountryClick }) => {
+const LeafletMap: React.FC<LeafletMapProps> = ({ countries, onCountryClick }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<L.Map | null>(null);
 
@@ -114,4 +114,4 @@ const CesiumMap: React.FC<CesiumMapProps> = ({ countries, onCountryClick }) => {
   );
 };
 
-export default CesiumMap;
+export default LeafletMap;

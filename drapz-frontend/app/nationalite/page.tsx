@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import dynamic from 'next/dynamic';
 import { countryService, productService } from '@/lib/services';
 
-const CesiumComponent = dynamic(() => import('@/components/cesium-map'), {
+const LeafletMapComponent = dynamic(() => import('@/components/leaflet-map'), {
   ssr: false,
   loading: () => <div className="w-full h-full flex items-center justify-center bg-gray-50 text-black font-semibold">Chargement de la carte...</div>,
 });
@@ -125,7 +125,7 @@ export default function CountriesMapPage() {
             Chargement des pays...
           </div>
         ) : (
-          <CesiumComponent
+          <LeafletMapComponent
             countries={countries}
             onCountryClick={handleCountryClick}
           />
