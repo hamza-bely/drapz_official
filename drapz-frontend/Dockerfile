@@ -5,7 +5,7 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV PORT=4000
-ENV HOST=0.0.0.0   # 👈 important
+ENV HOST=0.0.0.0
 
 # Installe uniquement les deps de prod
 COPY package*.json ./
