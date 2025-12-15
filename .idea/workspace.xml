@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cbe99a05-521d-4be7-9bb5-9a4adf915788" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/drapz-frontend/app/nationalite/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/drapz-frontend/app/nationalite/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/drapz-frontend/components/cesium-map.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/drapz-frontend/components/leaflet-map.tsx" afterDir="false" />
-    </list>
+    <list default="true" id="cbe99a05-521d-4be7-9bb5-9a4adf915788" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
