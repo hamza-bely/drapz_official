@@ -36,4 +36,4 @@ COPY --from=build /app/public ./public
 EXPOSE 4000
 
 # Lancer Next en écoutant sur 0.0.0.0
-CMD ["npx", "next", "start",
+CMD ["npx", "next", "start", "-p", "4000", "-H", "0.0.0.0"]
