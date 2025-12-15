@@ -3,7 +3,7 @@ spring:
     name: drapz-backend
 
   datasource:
-    url: jdbc:postgresql://80.225.94.110:5433/drapz_db
+    url: jdbc:postgresql://204.216.210.142:5432/drapz_db
     username: drapz_user
     password: drapz_password
     driver-class-name: org.postgresql.Driver

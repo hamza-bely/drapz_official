@@ -35,4 +35,7 @@ export const orderService = {
         });
         return data;
     },
+    createPaymentSession(articles: { produitId: string; quantite: number }[]) {
+        
+    }
 };

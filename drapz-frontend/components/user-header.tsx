@@ -1,4 +1,4 @@
-import { ShoppingCart, Menu, X, User, LogOut, LogIn, UserPlus, Globe, LayoutGrid } from 'lucide-react';
+import { ShoppingCart, Menu, X, User, LogOut, LogIn, UserPlus, Globe, LayoutGrid, Palette } from 'lucide-react';
 import { useCart } from '@/lib/cart-context';
 import { useAuth } from '@/lib/auth-context';
 import { Button } from '@/components/ui/button';
@@ -18,6 +18,7 @@ export function UserHeader() {
   const navLinks = [
     { href: '/catalogue', label: 'Catalogue', icon: LayoutGrid },
     { href: '/nationalite', label: 'Nationalités', icon: Globe },
+    { href: '/drapeaux-personnalises', label: 'Personnalisés', icon: Palette },
   ];
 
   return (

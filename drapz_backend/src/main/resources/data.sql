@@ -63,18 +63,10 @@ CREATE INDEX IF NOT EXISTS idx_produits_nom ON produits(nom);
 -- =====================================================
 
 -- Admin user (password: admin123)
-INSERT INTO utilisateur (id, email, password, role, actif, created_at, updated_at)
-SELECT '550e8400-e29b-41d4-a716-446655440000'::UUID, 'admin@drapz.com', '$2a$10$slYQmyNdGzin7olVN3/p2OPST9/PgBkqquzi.Ss8KIUgO2t0jKMm2', 'ADMIN', true, NOW(), NOW()
-WHERE NOT EXISTS (SELECT 1 FROM utilisateur WHERE email = 'admin@drapz.com');
 
--- Regular user (password: user123)
-INSERT INTO utilisateur (id, email, password, role, actif, created_at, updated_at)
-SELECT '550e8400-e29b-41d4-a716-446655440001'::UUID, 'user@drapz.com', '$2a$10$O8XLbXYmLIpV9jgVdRlN1OFd6Pw0hB9L7cKVVH2QVYfqV9H2H7Z3i', 'USER', true, NOW(), NOW()
-WHERE NOT EXISTS (SELECT 1 FROM utilisateur WHERE email = 'user@drapz.com');
+INSERT INTO personalized_flags (id, name, description, image_url) VALUES
+    (gen_random_uuid(), 'One Piece Straw Hat Flag', 'The Jolly Roger of the Straw Hat Pirates.', 'https://e7.pngegg.com/pngimages/23/593/png-clipart-monkey-d-luffy-one-piece-treasure-cruise-logo-roronoa-zoro-one-piece-logo-manga-one-piece.png');
 
--- =====================================================
--- 4. INSERT ALL COUNTRIES (201 countries/regions)
--- =====================================================
 
 INSERT INTO pays (id, nom, code, latitude, longitude, flag_url, actif, created_at, updated_at)
 SELECT * FROM (VALUES

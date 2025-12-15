@@ -83,6 +83,13 @@ export interface AuthResponse {
     role: string;
 }
 
+export interface PersonalizedFlag {
+    id: string;
+    name: string;
+    description: string;
+    imageUrl: string;
+}
+
 export interface InscriptionRequest {
     email: string;
     motDePasse: string;
