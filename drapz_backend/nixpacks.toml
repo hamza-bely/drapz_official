@@ -6,4 +6,3 @@ nixPkgs = ["jdk21"]
 cmds = ["./gradlew clean build -x test"]
 
 [start]
-cmd
