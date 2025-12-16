@@ -1,25 +1,25 @@
 
 # -------- STAGE 1: BUILD --------
-# Si ton hôte/registre est ARM64, force l’architecture:
-# FROM --platform=linux/arm64 eclipse-temurin:21-jdk-alpine as builder
-FROM eclipse-temurin:21-jdk-alpine as builder
+# Si ton hôte/registre est ARM64, décommente la ligne suivante :
+# FROM --platform=linux/arm64 eclipse-temurin:21-jdk-alpine AS builder
+FROM eclipse-temurin:21-jdk-alpine AS builder
 
 WORKDIR /app
-# Copie le fichier de wrapper Gradle et les scripts en premier pour profiter du cache
+
+# 1) Copie le wrapper Gradle AVANT tout le reste pour profiter du cache Docker
 COPY gradlew gradle.* /app/
 COPY gradle /app/gradle
-
-# Donne les droits d’exécution au wrapper
 RUN chmod +x gradlew
 
-# Copie le reste du projet
-COPY gradle/wrapper /app
+# 2) Copie TOUT le projet (incluant build.gradle, settings.gradle, src/, etc.)
+COPY . /app
 
-# (Optionnel) configure Java pour Gradle
-ENV JAVA_HOME=/opt/java/openjdk
-ENV PATH=$JAVA_HOME/bin:$PATH
+# (Optionnel) diagnostic pour vérifier que les fichiers sont bien là
+# RUN ls -la /app && ls -la /app/gradle && ls -la /app/src || true
+# RUN test -f /app/build.gradle -o -f /app/build.gradle.kts || (echo "build.gradle introuvable" && exit 1)
+# RUN test -f /app/settings.gradle -o -f /app/settings.gradle.kts || (echo "settings.gradle introuvable" && exit 1)
 
-# Build sans tests pour accélérer (tu peux enlever -x test si tu veux)
+# Build sans tests pour accélérer (retire -x test si nécessaire)
 RUN --mount=type=cache,target=/root/.gradle \
     ./gradlew clean build -x check -x test
 
@@ -27,11 +27,8 @@ RUN --mount=type=cache,target=/root/.gradle \
 FROM eclipse-temurin:21-jre-alpine
 
 WORKDIR /app
-
-# Copie le jar généré par Spring Boot (bootJar)
+# Le jar spring boot final est généralement build/libs/<nom>.jar
 COPY --from=builder /app/build/libs/*.jar app.jar
 
-# Expose le port si ton app écoute sur 8080
 EXPOSE 8080
-
-ENTRYPOINT ["java","-jar","/app/app.jar"]
+ENTRY
