@@ -111,7 +111,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4000", "http://localhost:3000", "https://ton-domaine-front.com")); // ✅ Ajoute ton front
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4000", "http://localhost:3000", "http://drapz-frontend-gfvt0r-67670e-204-216-210-142.traefik.me")); // ✅ Ajoute ton front
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept", "X-Requested-With"));
         configuration.setExposedHeaders(Arrays.asList("Authorization", "Set-Cookie")); // ✅ Expose les Set-Cookie
