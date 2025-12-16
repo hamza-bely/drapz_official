@@ -1,25 +1,28 @@
 
 # -------- STAGE 1: BUILD --------
-# Si ton hôte/registre est ARM64, décommente la ligne suivante :
+# Si ton hôte/registre est ARM64, tu peux forcer l’archi :
 # FROM --platform=linux/arm64 eclipse-temurin:21-jdk-alpine AS builder
 FROM eclipse-temurin:21-jdk-alpine AS builder
 
 WORKDIR /app
 
-# 1) Copie le wrapper Gradle AVANT tout le reste pour profiter du cache Docker
-COPY gradlew gradle.* /app/
-COPY gradle /app/gradle
-RUN chmod +x gradlew
-
-# 2) Copie TOUT le projet (incluant build.gradle, settings.gradle, src/, etc.)
+# 1) Copie TOUT le projet (incluant build.gradle, settings.gradle, src/, gradlew, gradle/)
 COPY . /app
 
-# (Optionnel) diagnostic pour vérifier que les fichiers sont bien là
-# RUN ls -la /app && ls -la /app/gradle && ls -la /app/src || true
-# RUN test -f /app/build.gradle -o -f /app/build.gradle.kts || (echo "build.gradle introuvable" && exit 1)
-# RUN test -f /app/settings.gradle -o -f /app/settings.gradle.kts || (echo "settings.gradle introuvable" && exit 1)
+# 2) (Fortement recommandé) Normaliser les fins de ligne au cas où gradlew a du CRLF
+#    - sed supprime les \r en fin de ligne
+RUN sed -i 's/\r$//' gradlew || true
 
-# Build sans tests pour accélérer (retire -x test si nécessaire)
+# 3) S'assurer que gradlew est exécutable (APRES le COPY . sinon c’est écrasé)
+RUN chmod +x gradlew
+
+# 4) Vérifs / diagnostics utiles (temporaire, à enlever une fois que ça marche)
+#    - Vérifie l’existence du wrapper jar
+RUN test -f gradle/wrapper/gradle-wrapper.jar || (echo 'gradle-wrapper.jar manquant' && ls -la gradle/wrapper && exit 1)
+#    - Affiche version gradle pour confirmer exécution OK
+RUN ./gradlew --version
+
+# 5) Build sans tests pour accélérer (enlève -x test si tu veux)
 RUN --mount=type=cache,target=/root/.gradle \
     ./gradlew clean build -x check -x test
 
@@ -27,8 +30,8 @@ RUN --mount=type=cache,target=/root/.gradle \
 FROM eclipse-temurin:21-jre-alpine
 
 WORKDIR /app
-# Le jar spring boot final est généralement build/libs/<nom>.jar
+
+# Copie le jar généré
 COPY --from=builder /app/build/libs/*.jar app.jar
 
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","/app/app.jar"]
