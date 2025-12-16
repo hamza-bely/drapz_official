@@ -13,7 +13,7 @@ COPY gradle /app/gradle
 RUN chmod +x gradlew
 
 # Copie le reste du projet
-COPY . /app
+COPY gradle/wrapper /app
 
 # (Optionnel) configure Java pour Gradle
 ENV JAVA_HOME=/opt/java/openjdk
